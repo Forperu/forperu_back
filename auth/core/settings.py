@@ -16,9 +16,9 @@ environ.Env.read_env()
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG')
 
-ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOSTS_DEV')]
+DEBUG = env.bool('DEBUG', default=False)
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS_DEV', default=[])
 
 CORS_ORIGIN_WHITELIST = env.list('CORS_ORIGIN_WHITELIST_DEV')
 CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS_DEV')
@@ -34,7 +34,9 @@ DJANGO_APPS = [
     'django.contrib.staticfiles',
 ]
 
-PROJECT_APPS = []
+PROJECT_APPS = [
+    'apps.user',
+]
 
 THIRD_PARTY_APPS = [
     'corsheaders',
@@ -42,8 +44,6 @@ THIRD_PARTY_APPS = [
     'rest_framework_api',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
-    'ckeditor',
-    'ckeditor_uploader',
     'channels',
 ]
 
@@ -86,22 +86,18 @@ ASGI_APPLICATION = 'core.asgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'forperu_db',
-        'HOST': 'localhost',
-        'PORT': '3307',
-    }
-}
-DATABASES["default"]["ATOMIC_REQUESTS"] = True
-
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://redis:6379/1",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        'NAME': os.environ.get('MYSQL_NAME'),
+        'USER': os.environ.get('MYSQL_USER'),
+        'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
+        'HOST': os.environ.get('MYSQL_HOST'),  # Usa el nombre del servicio MySQL en docker-compose
+        'PORT': os.environ.get('MYSQL_PORT'),
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+            'connect_timeout': 30,  # Aumentar tiempo de espera
         }
     }
 }
+DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -144,7 +140,7 @@ STATIC_FILES_DIRS = [
     os.path.join(BASE_DIR, 'build/static'),
 ]
 
-# AUTH_USER_MODEL = 'auth.User'
+# AUTH_USER_MODEL = 'user.User'
 
 FILE_UPLOAD_PERMISSIONS = 0o640
 
@@ -185,3 +181,24 @@ SIMPLE_JWT = {
 }
 
 # Djoser settings
+DJOSER = {
+    'LOGIN_FIELD': 'email',
+    'USER_CREATE_PASSWORD_RETYPE': True,
+    'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
+    'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
+    'SEND_CONFIRMATION_EMAIL': True,
+    'SEND_ACTIVATION_EMAIL': True,
+    'SET_USERNAME_RETYPE': True,
+    'PASSWORD_RESET_CONFIRM_RETYPE': 'password/confirm/{uid}/{token}',
+    'SET_PASSWORD_RETYPE': True,
+    'PASSWORD_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'auth/{uid}/{token}',
+    'SERIALIZERS': {
+        'user_create': 'apps.user.serializers.UserCreateSerializer',
+        'user': 'apps.user.serializers.UserSerializer',
+        'current_user': 'apps.user.serializers.UserSerializer',
+        'user_delete': 'djoser.serializers.UserDeleteSerializer',
+    },
+    'TOKEN_MODEL': 'rest_framework_simplejwt.tokens.AccessToken',
+    'TOKEN_CREATE_SERIALIZER': 'rest_framework_simplejwt.serializers.TokenObtainPairSerializer',
+}
