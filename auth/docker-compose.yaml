@@ -1,0 +1,31 @@
+services:
+  # Django
+  django_auth:
+    container_name: forperu_ms_auth
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - 8000:8000
+    depends_on:
+      - db_auth
+      - redis_auth
+  # Mysql
+  db_auth:
+    image: mysql:8.3
+    container_name: django_auth_api_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: forperu_db
+    ports:
+      - 3307:3306
+    volumes:
+      - .dbdata:/var/lib/mysql
+  # Kafka
+  # Redis
+  redis_auth:
+    image: redis:latest
+    container_name: django_auth_api_redis
+    ports:
+      - 6379:6379
