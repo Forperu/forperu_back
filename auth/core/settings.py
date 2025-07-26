@@ -140,7 +140,7 @@ STATIC_FILES_DIRS = [
     os.path.join(BASE_DIR, 'build/static'),
 ]
 
-# AUTH_USER_MODEL = 'user.User'
+AUTH_USER_MODEL = 'user.UserAccount'
 
 FILE_UPLOAD_PERMISSIONS = 0o640
 
@@ -202,3 +202,7 @@ DJOSER = {
     'TOKEN_MODEL': 'rest_framework_simplejwt.tokens.AccessToken',
     'TOKEN_CREATE_SERIALIZER': 'rest_framework_simplejwt.serializers.TokenObtainPairSerializer',
 }
+
+ACTIVE_CAMPAIGN_URL = os.environ.get('ACTIVE_CAMPAIGN_URL')
+ACTIVE_CAMPAIGN_KEY = os.environ.get('ACTIVE_CAMPAIGN_KEY')
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
