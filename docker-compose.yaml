@@ -1,0 +1,44 @@
+services:
+  # Django
+  django_auth:
+    container_name: forperu_auth
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - 8000:8000
+    environment:
+      MYSQL_NAME: forperu_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: admin
+      MYSQL_HOST: host.docker.internal
+      MYSQL_PORT: 3306
+      DEBUG: "True"
+      SECRET_KEY: django-insecure-)++e$_cd1t%y8zcmjc@*jg2ux=3h8ul9n1omt-t7jpz=#tb0qx
+      ALLOWED_HOSTS_DEV: "*"
+      CORS_ORIGIN_WHITELIST_DEV: http://localhost:8000,http://localhost:8080,http://localhost:8081
+      CSRF_TRUSTED_ORIGINS_DEV: http://localhost:8000,http://localhost:8080,http://localhost:8081
+    # depends_on:
+    #   - db_auth
+    #   - redis_auth
+
+  # Mysql
+  # db_auth:
+  #   image: mysql:8.3
+  #   container_name: django_auth_api_mysql
+  #   restart: always
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: root_password
+  #     MYSQL_DATABASE: forperu_db
+  #   ports:
+  #     - 3307:3306
+  #   volumes:
+  #     - .dbdata:/var/lib/mysql
+  
+  # # Kafka
+  # # Redis
+  # redis_auth:
+  #   image: redis:latest
+  #   container_name: django_auth_api_redis
+  #   ports:
+  #     - 6379:6379
