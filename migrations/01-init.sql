@@ -374,8 +374,8 @@ CREATE TABLE IF NOT EXISTS
     document_type VARCHAR(3) NOT NULL CHECK (document_type IN ('dni', 'ruc', 'ce')),
     document_number VARCHAR(12) NOT NULL,
     email VARCHAR(50) NOT NULL,
-    address VARCHAR(200),
     phone CHAR(9),
+    address VARCHAR(200),
     status BIT (1) NOT NULL DEFAULT 1, -- Usar BIT(1) con valor predeterminado de 1
     created_by INT DEFAULT NULL,
     updated_by INT DEFAULT NULL,
@@ -392,8 +392,8 @@ CREATE TABLE IF NOT EXISTS
     ruc CHAR(11) NOT NULL,
     email VARCHAR(100),
     phone VARCHAR(20),
-    web_site VARCHAR(100) DEFAULT NULL,
     address TEXT,
+    web_site VARCHAR(100) DEFAULT NULL,
     status BIT (1) NOT NULL DEFAULT 1, -- Usar BIT(1) con valor predeterminado de 1
     created_by INT DEFAULT NULL,
     updated_by INT DEFAULT NULL,

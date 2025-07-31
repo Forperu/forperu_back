@@ -24,6 +24,7 @@ class UserSerializer(serializers.ModelSerializer):
   company = serializers.SerializerMethodField()
   employee = serializers.SerializerMethodField()
   role = serializers.SerializerMethodField()
+  status = serializers.IntegerField()
   
   class Meta:
     model = User

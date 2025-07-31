@@ -6,7 +6,7 @@ class Brand(models.Model):
   description = models.TextField(null=True, blank=True)
   logo_url = models.CharField(max_length=255, null=True, blank=True)
   website_url = models.CharField(max_length=255, null=True, blank=True)
-  status = models.BooleanField(default=True)
+  status = models.BooleanField(default=1)
   created_by = models.ForeignKey(
     'users.UserAccount',
     on_delete=models.CASCADE,

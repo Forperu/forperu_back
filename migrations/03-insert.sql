@@ -7,13 +7,13 @@ INSERT INTO `plans` (
 (3, 'Corporativo', 'Para grandes empresas con operaciones extensas', 699.00, 20, 50, 5000, 200, 2000, 2000, 50000);
 
 -- Insertar datos en la tabla currencies
-INSERT INTO `currencies` (id, name, description, code, symbol) VALUES
-(1, 'US Dollar', 'United States Dollar', 'USD', '$'),
-(2, 'Euro', 'European Union Currency', 'EUR', '€'),
-(3, 'British Pound', 'United Kingdom Currency', 'GBP', '£'),
-(4, 'Japanese Yen', 'Japanese Currency', 'JPY', '¥'),
-(5, 'Mexican Peso', 'Mexican Currency', 'MXN', '$'),
-(6, 'Peruvian Sol', 'Currency of Peru', 'PEN', 'S/');
+INSERT INTO `currencies` (id, name, description, code, symbol, status, created_at) VALUES
+(1, 'US Dollar', 'United States Dollar', 'USD', '$', 1, NOW()),
+(2, 'Euro', 'European Union Currency', 'EUR', '€', 1, NOW()),
+(3, 'British Pound', 'United Kingdom Currency', 'GBP', '£', 1, NOW()),
+(4, 'Japanese Yen', 'Japanese Currency', 'JPY', '¥', 1, NOW()),
+(5, 'Mexican Peso', 'Mexican Currency', 'MXN', '$', 1, NOW()),
+(6, 'Peruvian Sol', 'Currency of Peru', 'PEN', 'S/', 1, NOW());
 
 -- Insertar datos en la tabla roles
 INSERT INTO `roles` (id, name, description, created_at) VALUES
@@ -179,11 +179,11 @@ INSERT INTO `taxes` (id, name, description, rate, tax_type, created_by) VALUES
 (5, 'Impuesto Fijo', 'Ejemplo de impuesto con monto fijo', 5.00, 1, 1);
 
 -- Insertar datos en la tabla exchange_rates
-INSERT INTO `exchange_rates` (id, base_currency_id, target_currency_id, exchange_rate, created_by) VALUES
-(1, 6, 1, 3.80, 1), -- PEN a USD
-(2, 6, 2, 4.10, 1), -- PEN a EUR
-(3, 6, 3, 4.80, 1), -- PEN a GBP
-(4, 6, 4, 0.028, 1); -- PEN a JPY
+INSERT INTO `exchange_rates` (id, base_currency_id, target_currency_id, exchange_rate, created_by, created_at) VALUES
+(1, 6, 1, 3.80, 1, NOW()), -- PEN a USD
+(2, 6, 2, 4.10, 1, NOW()), -- PEN a EUR
+(3, 6, 3, 4.80, 1, NOW()), -- PEN a GBP
+(4, 6, 4, 0.028, 1, NOW()); -- PEN a JPY
 
 -- Insertar datos en la tabla categories
 INSERT INTO `categories` (id, name, description, status, created_by, created_at) VALUES
@@ -2576,53 +2576,53 @@ INSERT INTO `product_categories` (id, product_id, category_id) VALUES
 -- Insertar datos en la tabla customers
 INSERT INTO `customers` (
     id, names, surname, second_surname, 
-    company_name, document_type, document_number, email, address, phone, created_by
+    company_name, document_type, document_number, email, address, phone, status, created_by, created_at
 ) VALUES
-(1, 'Juan Carlos', 'Pérez', 'Gómez', NULL, 'dni', '12345678', 'juan.perez@gmail.com', 'Av. Los Olivos 123, Lima', '987654321', 1),
-(2, 'María Luisa', 'Torres', 'Ramírez', NULL, 'dni', '87654321', 'maria.torres@gmail.com', 'Calle La Marina 456, Arequipa', '912345678', 1),
-(3, NULL, NULL, NULL, 'Inversiones El Buen Precio SAC', 'ruc', '20481234567', 'contacto@buenprecio.com', 'Jr. Las Flores 789, Trujillo', '923456789', 1),
-(4, 'Luis Alberto Manuel', 'García', 'López', NULL, 'dni', '23456789', 'luis.garcia@gmail.com', 'Av. Brasil 321, Lima', '934567890', 1),
-(5, 'Ana Sofía', 'Martínez', 'Díaz', NULL, 'dni', '34567890', 'ana.martinez@gmail.com', 'Calle Los Pinos 654, Cusco', '945678901', 1),
-(6, NULL, NULL, NULL, 'Tech Solutions SAC', 'ruc', '20551234567', 'info@techsolutions.com', 'Av. La Paz 987, Arequipa', '956789012', 1),
-(7, 'Carlos Andrés', 'Fernández', 'Vargas', NULL, 'dni', '45678901', 'carlos.fernandez@gmail.com', 'Jr. San Martín 123, Trujillo', '967890123', 1),
-(8, 'Lucía Isabel', 'Hernández', 'Morales', NULL, 'dni', '56789012', 'lucia.hernandez@gmail.com', 'Av. Los Alamos 456, Lima', '978901234', 1),
-(9, NULL, NULL, NULL, 'Construcciones Modernas SAC', 'ruc', '20661234567', 'contacto@construccionesmodernas.com', 'Calle Los Olivos 789, Cusco', '989012345', 1),
-(10, 'Pedro José', 'Sánchez', 'Ruiz', NULL, 'dni', '67890123', 'pedro.sanchez@gmail.com', 'Av. Los Jardines 321, Arequipa', '990123456', 1),
-(11, 'Elena María', 'Díaz', 'Gómez', NULL, 'dni', '78901234', 'elena.diaz@gmail.com', 'Jr. Las Rosas 654, Trujillo', '901234567', 1),
-(12, NULL, NULL, NULL, 'Importaciones Globales SAC', 'ruc', '20771234567', 'info@importacionesglobales.com', 'Av. Los Pinos 987, Lima', '912345678', 1),
-(13, 'Miguel Ángel', 'López', 'García', NULL, 'dni', '89012345', 'miguel.lopez@gmail.com', 'Calle Los Laureles 123, Cusco', '923456789', 1),
-(14, 'Carmen Rosa', 'Gómez', 'Fernández', NULL, 'dni', '90123456', 'carmen.gomez@gmail.com', 'Av. Los Claveles 456, Arequipa', '934567890', 1),
-(15, NULL, NULL, NULL, 'Logística Rápida SAC', 'ruc', '20881234567', 'contacto@logisticarapida.com', 'Jr. Las Palmeras 789, Trujillo', '945678901', 1);
+(1, 'Juan Carlos', 'Pérez', 'Gómez', NULL, 'dni', '12345678', 'juan.perez@gmail.com', 'Av. Los Olivos 123, Lima', '987654321', 1, 1, NOW()),
+(2, 'María Luisa', 'Torres', 'Ramírez', NULL, 'dni', '87654321', 'maria.torres@gmail.com', 'Calle La Marina 456, Arequipa', '912345678', 1, 1, NOW()),
+(3, NULL, NULL, NULL, 'Inversiones El Buen Precio SAC', 'ruc', '20481234567', 'contacto@buenprecio.com', 'Jr. Las Flores 789, Trujillo', '923456789', 1, 1, NOW()),
+(4, 'Luis Alberto Manuel', 'García', 'López', NULL, 'dni', '23456789', 'luis.garcia@gmail.com', 'Av. Brasil 321, Lima', '934567890', 1, 1, NOW()),
+(5, 'Ana Sofía', 'Martínez', 'Díaz', NULL, 'dni', '34567890', 'ana.martinez@gmail.com', 'Calle Los Pinos 654, Cusco', '945678901', 1, 1, NOW()),
+(6, NULL, NULL, NULL, 'Tech Solutions SAC', 'ruc', '20551234567', 'info@techsolutions.com', 'Av. La Paz 987, Arequipa', '956789012', 1, 1, NOW()),
+(7, 'Carlos Andrés', 'Fernández', 'Vargas', NULL, 'dni', '45678901', 'carlos.fernandez@gmail.com', 'Jr. San Martín 123, Trujillo', '967890123', 1, 1, NOW()),
+(8, 'Lucía Isabel', 'Hernández', 'Morales', NULL, 'dni', '56789012', 'lucia.hernandez@gmail.com', 'Av. Los Alamos 456, Lima', '978901234', 1, 1, NOW()),
+(9, NULL, NULL, NULL, 'Construcciones Modernas SAC', 'ruc', '20661234567', 'contacto@construccionesmodernas.com', 'Calle Los Olivos 789, Cusco', '989012345', 1, 1, NOW()),
+(10, 'Pedro José', 'Sánchez', 'Ruiz', NULL, 'dni', '67890123', 'pedro.sanchez@gmail.com', 'Av. Los Jardines 321, Arequipa', '990123456', 1, 1, NOW()),
+(11, 'Elena María', 'Díaz', 'Gómez', NULL, 'dni', '78901234', 'elena.diaz@gmail.com', 'Jr. Las Rosas 654, Trujillo', '901234567', 1, 1, NOW()),
+(12, NULL, NULL, NULL, 'Importaciones Globales SAC', 'ruc', '20771234567', 'info@importacionesglobales.com', 'Av. Los Pinos 987, Lima', '912345678', 1, 1, NOW()),
+(13, 'Miguel Ángel', 'López', 'García', NULL, 'dni', '89012345', 'miguel.lopez@gmail.com', 'Calle Los Laureles 123, Cusco', '923456789', 1, 1, NOW()),
+(14, 'Carmen Rosa', 'Gómez', 'Fernández', NULL, 'dni', '90123456', 'carmen.gomez@gmail.com', 'Av. Los Claveles 456, Arequipa', '934567890', 1, 1, NOW()),
+(15, NULL, NULL, NULL, 'Logística Rápida SAC', 'ruc', '20881234567', 'contacto@logisticarapida.com', 'Jr. Las Palmeras 789, Trujillo', '945678901', 1, 1, NOW());
 
 -- Insertar datos en la tabla suppliers
-INSERT INTO `suppliers` (id, ruc, name, email, phone, address, created_by) VALUES 
-(1, '12345678901', 'Ferro Perú S.A.', 'contacto@ferroperu.com', '+51 1 234 5678', 'Av. Argentina 1543, Callao, Lima, Perú', 1),
-(2, '12345678902', 'Sodimac Perú S.A.', 'ventas@sodimac.com.pe', '+51 1 411 6000', 'Av. Javier Prado Este 4200, Surco, Lima, Perú', 1),
-(3, '12345678903', 'Maestro Perú S.A.', 'info@maestro.com.pe', '+51 1 614 6000', 'Av. La Marina 2350, San Miguel, Lima, Perú', 1),
-(4, '12345678904', 'Disensa Perú', 'atencion@disensa.com.pe', '+51 1 719 2000', 'Av. Alfredo Mendiola 5545, Los Olivos, Lima, Perú', 1),
-(5, '12345678905', 'Promart Homecenter', 'soporte@promart.com.pe', '+51 1 619 1616', 'Av. Tomás Marsano 3675, Surquillo, Lima, Perú', 1),
-(6, '12345678906', 'Ferretería EPA', 'contacto@epa.com.pe', '+51 1 705 0000', 'Av. Nicolás Ayllón 5777, Ate, Lima, Perú', 1),
-(7, '12345678907', 'Cementos Pacasmayo', 'ventas@pacasmayo.com.pe', '+51 44 608 400', 'Av. Pacasmayo 230, Trujillo, La Libertad, Perú', 1),
-(8, '12345678908', 'Fierros & Aceros S.A.', 'ventas@fierrosyacerossa.com', '+51 1 336 7890', 'Av. Industrial 4230, San Martín de Porres, Lima, Perú', 1),
-(9, '12345678909', 'Siderperu', 'clientes@siderperu.com.pe', '+51 44 481 110', 'Av. Néstor Gambetta 1234, Chimbote, Áncash, Perú', 1),
-(10, '12345678910', 'Construrama Perú', 'info@construrama.com.pe', '+51 1 345 6789', 'Jr. Puno 1350, Cercado de Lima, Lima, Perú', 1),
-(11, '12345678911', 'Indeco Perú', 'ventas@indeco.com.pe', '+51 1 213 7000', 'Av. Canadá 3350, San Luis, Lima, Perú', 1),
-(12, '12345678912', 'Ferrotodo S.A.C.', 'ventas@ferrotodo.com.pe', '+51 1 555 7777', 'Av. Colonial 1498, Cercado de Lima, Lima, Perú', 1),
-(13, '12345678913', 'Metales Peruanos S.A.', 'info@metalesperuanos.com', '+51 1 619 8000', 'Jr. Parinacochas 565, La Victoria, Lima, Perú', 1),
-(14, '12345678914', 'Grupo Fierro', 'contacto@grupofierro.com.pe', '+51 1 567 8900', 'Av. Faucett 3000, Callao, Lima, Perú', 1),
-(15, '12345678915', 'Grupo Ferretero S.A.C.', 'ventas@grupoferretero.com.pe', '+51 1 700 1234', 'Av. Los Héroes 350, San Juan de Miraflores, Lima, Perú', 1),
-(16, '12345678916', 'Ferretería del Norte', 'norte@ferreterianorte.com.pe', '+51 44 345 6789', 'Av. España 1245, Trujillo, La Libertad, Perú', 1),
-(17, '12345678917', 'Aceros Arequipa', 'info@acerosarequipa.com', '+51 54 284 400', 'Av. Aviación 1000, Cerro Colorado, Arequipa, Perú', 1),
-(18, '12345678918', 'Tornillos y Herramientas S.A.C.', 'ventas@tyh.com.pe', '+51 1 765 4321', 'Av. Nicolás de Piérola 250, Cercado de Lima, Lima, Perú', 1);
+INSERT INTO `suppliers` (id, ruc, name, email, phone, address, status, created_by, created_at) VALUES 
+(1, '12345678901', 'Ferro Perú S.A.', 'contacto@ferroperu.com', '+51 1 234 5678', 'Av. Argentina 1543, Callao, Lima, Perú', 1, 1, NOW()),
+(2, '12345678902', 'Sodimac Perú S.A.', 'ventas@sodimac.com.pe', '+51 1 411 6000', 'Av. Javier Prado Este 4200, Surco, Lima, Perú', 1, 1, NOW()),
+(3, '12345678903', 'Maestro Perú S.A.', 'info@maestro.com.pe', '+51 1 614 6000', 'Av. La Marina 2350, San Miguel, Lima, Perú', 1, 1, NOW()),
+(4, '12345678904', 'Disensa Perú', 'atencion@disensa.com.pe', '+51 1 719 2000', 'Av. Alfredo Mendiola 5545, Los Olivos, Lima, Perú', 1, 1, NOW()),
+(5, '12345678905', 'Promart Homecenter', 'soporte@promart.com.pe', '+51 1 619 1616', 'Av. Tomás Marsano 3675, Surquillo, Lima, Perú', 1, 1, NOW()),
+(6, '12345678906', 'Ferretería EPA', 'contacto@epa.com.pe', '+51 1 705 0000', 'Av. Nicolás Ayllón 5777, Ate, Lima, Perú', 1, 1, NOW()),
+(7, '12345678907', 'Cementos Pacasmayo', 'ventas@pacasmayo.com.pe', '+51 44 608 400', 'Av. Pacasmayo 230, Trujillo, La Libertad, Perú', 1, 1, NOW()),
+(8, '12345678908', 'Fierros & Aceros S.A.', 'ventas@fierrosyacerossa.com', '+51 1 336 7890', 'Av. Industrial 4230, San Martín de Porres, Lima, Perú', 1, 1, NOW()),
+(9, '12345678909', 'Siderperu', 'clientes@siderperu.com.pe', '+51 44 481 110', 'Av. Néstor Gambetta 1234, Chimbote, Áncash, Perú', 1, 1, NOW()),
+(10, '12345678910', 'Construrama Perú', 'info@construrama.com.pe', '+51 1 345 6789', 'Jr. Puno 1350, Cercado de Lima, Lima, Perú', 1, 1, NOW()),
+(11, '12345678911', 'Indeco Perú', 'ventas@indeco.com.pe', '+51 1 213 7000', 'Av. Canadá 3350, San Luis, Lima, Perú', 1, 1, NOW()),
+(12, '12345678912', 'Ferrotodo S.A.C.', 'ventas@ferrotodo.com.pe', '+51 1 555 7777', 'Av. Colonial 1498, Cercado de Lima, Lima, Perú', 1, 1, NOW()),
+(13, '12345678913', 'Metales Peruanos S.A.', 'info@metalesperuanos.com', '+51 1 619 8000', 'Jr. Parinacochas 565, La Victoria, Lima, Perú', 1, 1, NOW()),
+(14, '12345678914', 'Grupo Fierro', 'contacto@grupofierro.com.pe', '+51 1 567 8900', 'Av. Faucett 3000, Callao, Lima, Perú', 1, 1, NOW()),
+(15, '12345678915', 'Grupo Ferretero S.A.C.', 'ventas@grupoferretero.com.pe', '+51 1 700 1234', 'Av. Los Héroes 350, San Juan de Miraflores, Lima, Perú', 1, 1, NOW()),
+(16, '12345678916', 'Ferretería del Norte', 'norte@ferreterianorte.com.pe', '+51 44 345 6789', 'Av. España 1245, Trujillo, La Libertad, Perú', 1, 1, NOW()),
+(17, '12345678917', 'Aceros Arequipa', 'info@acerosarequipa.com', '+51 54 284 400', 'Av. Aviación 1000, Cerro Colorado, Arequipa, Perú', 1, 1, NOW()),
+(18, '12345678918', 'Tornillos y Herramientas S.A.C.', 'ventas@tyh.com.pe', '+51 1 765 4321', 'Av. Nicolás de Piérola 250, Cercado de Lima, Lima, Perú', 1, 1, NOW());
 
 -- Insertar datos en la tabla payment_methods
-INSERT INTO `payment_methods` (id, name, description, status, created_by)
+INSERT INTO `payment_methods` (id, name, description, status, created_by, created_at)
 VALUES 
-(1, 'Efectivo', 'Pago en efectivo', 1, 1),
-(2, 'Tarjeta de Crédito', 'Pago con tarjeta de crédito', 1, 1),
-(3, 'Transferencia Bancaria', 'Pago por transferencia bancaria', 1, 1),
-(4, 'Yape', 'Pago mediante Yape', 1, 1),
-(5, 'Plin', 'Pago mediante Plin', 1, 1);
+(1, 'Efectivo', 'Pago en efectivo', 1, 1, NOW()),
+(2, 'Tarjeta de Crédito', 'Pago con tarjeta de crédito', 1, 1, NOW()),
+(3, 'Transferencia Bancaria', 'Pago por transferencia bancaria', 1, 1, NOW()),
+(4, 'Yape', 'Pago mediante Yape', 1, 1, NOW()),
+(5, 'Plin', 'Pago mediante Plin', 1, 1, NOW());
 
 -- Insertar datos en la tabla registros de caja
 INSERT INTO `cash_registers` (id, warehouse_id, user_open_id, initial_amount)

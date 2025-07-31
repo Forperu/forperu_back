@@ -1,13 +1,15 @@
 from django.db import models
 
+from apps.companies.models import Company
+
 # Create your models here.
 class BranchOffice(models.Model):
-  company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, db_column='company_id')
+  company = models.ForeignKey(Company, on_delete=models.CASCADE, db_column='company_id')
   name = models.CharField(max_length=200)
   description = models.TextField(null=True, blank=True)
   address = models.TextField()
   phone = models.CharField(max_length=15, null=True, blank=True)
-  status = models.BooleanField(default=True)
+  status = models.BooleanField(default=1)
   created_by = models.ForeignKey(
     'users.UserAccount',
     on_delete=models.CASCADE,

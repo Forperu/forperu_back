@@ -32,7 +32,7 @@ class Product(models.Model):
   barcode = models.CharField(max_length=100, null=True, blank=True)
   rating = models.DecimalField(max_digits=4, decimal_places=2, default=0, null=True, blank=True)
   extra_shipping_fee = models.DecimalField(max_digits=14, decimal_places=2, default=0, null=True, blank=True)
-  status = models.BooleanField(default=True)
+  status = models.BooleanField(default=1)
   created_by = models.ForeignKey(
     'users.UserAccount',
     on_delete=models.CASCADE,

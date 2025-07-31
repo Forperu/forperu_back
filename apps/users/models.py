@@ -47,7 +47,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
   email = models.EmailField(unique=True)
   settings = models.JSONField(default=dict, blank=True, null=True)
   shortcuts = models.JSONField(default=list, blank=True, null=True)
-  status = models.BooleanField(default=True)
+  status = models.BooleanField(default=1)
   
   created_at = models.DateTimeField(default=timezone.now)
   updated_at = models.DateTimeField(null=True, blank=True)

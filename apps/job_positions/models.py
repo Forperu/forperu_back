@@ -1,11 +1,13 @@
 from django.db import models
 
+from apps.work_areas.models import WorkArea
+
 # Create your models here.
 class JobPosition(models.Model):
-  work_area = models.ForeignKey('work_areas.WorkArea', on_delete=models.CASCADE, db_column='work_area_id')
+  work_area = models.ForeignKey(WorkArea, on_delete=models.CASCADE, db_column='work_area_id')
   name = models.CharField(max_length=100)
   description = models.TextField(null=True, blank=True)
-  status = models.BooleanField(default=True)
+  status = models.BooleanField(default=1)
   created_by = models.ForeignKey(
     'users.UserAccount',
     on_delete=models.CASCADE,

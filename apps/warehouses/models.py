@@ -1,14 +1,17 @@
 from django.db import models
 
+from apps.branch_offices.models import BranchOffice
+from apps.companies.models import Company
+
 # Create your models here.
 class Warehouse(models.Model):
-  company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, db_column='company_id', null=True, blank=True)
-  branch_office = models.ForeignKey('branch_offices.BranchOffice', on_delete=models.CASCADE, db_column='branch_office_id', null=True, blank=True)
+  company = models.ForeignKey(Company, on_delete=models.CASCADE, db_column='company_id', null=True, blank=True)
+  branch_office = models.ForeignKey(BranchOffice, on_delete=models.CASCADE, db_column='branch_office_id', null=True, blank=True)
   name = models.CharField(max_length=200)
   description = models.TextField(null=True, blank=True)
   address = models.TextField(null=True, blank=True)
   phone = models.CharField(max_length=15, null=True, blank=True)
-  status = models.BooleanField(default=True)
+  status = models.BooleanField(default=1)
   created_by = models.ForeignKey(
     'users.UserAccount',
     on_delete=models.CASCADE,

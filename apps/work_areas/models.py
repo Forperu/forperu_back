@@ -4,7 +4,7 @@ from django.db import models
 class WorkArea(models.Model):
   name = models.CharField(max_length=100)
   description = models.TextField(null=True, blank=True)
-  status = models.BooleanField(default=True)
+  status = models.BooleanField(default=1)
   created_by = models.ForeignKey(
     'users.UserAccount',
     on_delete=models.CASCADE,

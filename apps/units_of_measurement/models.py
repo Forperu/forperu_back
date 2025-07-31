@@ -5,7 +5,7 @@ class UnitOfMeasurement(models.Model):
   name = models.CharField(max_length=200)
   shortcut = models.TextField(null=True, blank=True)
   description = models.TextField(null=True, blank=True)
-  status = models.BooleanField(default=True)
+  status = models.BooleanField(default=1)
   created_by = models.ForeignKey(
     'users.UserAccount',
     on_delete=models.CASCADE,
