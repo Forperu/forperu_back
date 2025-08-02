@@ -3,13 +3,20 @@ from django.db import models
 from apps.brands.models import Brand
 from apps.units_of_measurement.models import UnitOfMeasurement
 
+class PriceProducts(models.Model):
+  name = models.CharField(max_length=50)
+  price = models.FloatField()
+
+  def __str__(self):
+    return f"{self.name}: {self.price}"
+    
 # Create your models here.
 class Product(models.Model):
   name = models.CharField(max_length=255)
   brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, db_column='brand_id', null=True, blank=True, related_name='products')
   unit_of_measurement = models.ForeignKey(UnitOfMeasurement, on_delete=models.SET_NULL, db_column='unit_of_measurement_id', null=True, blank=True, related_name='products')
   handle = models.TextField(max_length=255, null=True, blank=True)
-  description = models.TextField()
+  description = models.TextField(null=True, blank=True)
   tags = models.JSONField(default=dict, blank=True, null=True)
   featured_image = models.TextField(max_length=10, null=True, blank=True)
   images = models.JSONField(default=dict, blank=True, null=True)

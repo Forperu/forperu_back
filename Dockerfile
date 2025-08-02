@@ -9,6 +9,7 @@ RUN pip install django-ckeditor
 RUN pip install channels
 RUN pip install django-axes
 RUN pip install djoser
+RUN pip install openpyxl
 RUN pip install -r requirements.txt
 COPY . /app
 

@@ -35,3 +35,4 @@ whitenoise==6.9.0
 uvicorn==0.35.0
 
 django-unslashed==0.3.0
+openpyxl==3.1.5
