@@ -39,7 +39,10 @@ class CompanyAPIView(APIView):
       company = get_object_or_404(Company, pk=pk, deleted_at__isnull=True)
       serializer = CompanySerializer(company, data=request.data)
       if serializer.is_valid():
-          serializer.save(updated_by=request.user)
+          serializer.save(
+            updated_by=request.user,
+            updated_at=timezone.now()
+          )
           return Response(serializer.data, status=status.HTTP_200_OK)
       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -48,7 +51,10 @@ class CompanyAPIView(APIView):
       company = get_object_or_404(Company, pk=pk, deleted_at__isnull=True)
       serializer = CompanySerializer(company, data=request.data, partial=True)
       if serializer.is_valid():
-          serializer.save(updated_by=request.user)
+          serializer.save(
+            updated_by=request.user,
+            updated_at=timezone.now()
+          )
           return Response(serializer.data, status=status.HTTP_200_OK)
       return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

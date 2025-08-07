@@ -4,6 +4,8 @@ from apps.work_areas.serializers import WorkAreaSerializer
 
 class JobPositionSerializer(serializers.ModelSerializer):
   work_area = serializers.SerializerMethodField()
+  work_area_id = serializers.IntegerField()
+  status = serializers.IntegerField()
 
   class Meta:
     model = JobPosition

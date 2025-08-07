@@ -2900,212 +2900,212 @@ INSERT INTO `keys` (id, system_id, name, description, config_key, config_value, 
 (33, 7, 'Password SUNAT PFX', 'Password del archivo PFX de SUNAT', 'sunat_cert_pfx_password', 'pfxPassword321', 1, 1);
 
 -- Insertar tipos de asistencia básicos
-INSERT INTO `attendance_types` (id, name, code, description) VALUES
-(1, 'Teletrabajo', 'TELE', 'Día laboral en modalidad de teletrabajo'),
-(2, 'Viaje de Negocios', 'VIAJ', 'Asistencia registrada durante viaje de negocios'),
-(3, 'Capacitación Externa', 'CAPE', 'Asistencia a capacitación fuera de la oficina'),
-(4, 'Licencia por Maternidad', 'MAT', 'Licencia por maternidad/paternidad'),
-(5, 'Licencia por Duelo', 'DUEL', 'Licencia por fallecimiento de familiar'),
-(6, 'Normal', 'NORM', 'Asistencia normal en horario laboral'),
-(7, 'Tardanza', 'TARD', 'El empleado llegó tarde'),
-(8, 'Salida Temprana', 'SALT', 'El empleado salió antes de tiempo'),
-(9, 'Falta Justificada', 'FJUS', 'Falta con justificación aprobada'),
-(10, 'Falta Injustificada', 'FINJ', 'Falta sin justificación');
+INSERT INTO `attendance_types` (id, name, code, description, created_at) VALUES
+(1, 'Teletrabajo', 'TELE', 'Día laboral en modalidad de teletrabajo', NOW()),
+(2, 'Viaje de Negocios', 'VIAJ', 'Asistencia registrada durante viaje de negocios', NOW()),
+(3, 'Capacitación Externa', 'CAPE', 'Asistencia a capacitación fuera de la oficina', NOW()),
+(4, 'Licencia por Maternidad', 'MAT', 'Licencia por maternidad/paternidad', NOW()),
+(5, 'Licencia por Duelo', 'DUEL', 'Licencia por fallecimiento de familiar', NOW()),
+(6, 'Normal', 'NORM', 'Asistencia normal en horario laboral', NOW()),
+(7, 'Tardanza', 'TARD', 'El empleado llegó tarde', NOW()),
+(8, 'Salida Temprana', 'SALT', 'El empleado salió antes de tiempo', NOW()),
+(9, 'Falta Justificada', 'FJUS', 'Falta con justificación aprobada', NOW()),
+(10, 'Falta Injustificada', 'FINJ', 'Falta sin justificación', NOW());
 
 -- Insertar asistencias
-INSERT INTO `attendances` (id, employee_id, attendance_type_id, date, check_in, check_out, worked_hours, late_minutes, status) VALUES
-(1, 1, 1, '2023-01-02', '2023-01-02 08:58:00', '2023-01-02 17:05:00', 8.12, 0, 'approved'),
-(2, 1, 1, '2023-01-03', '2023-01-03 09:15:00', '2023-01-03 17:10:00', 7.92, 15, 'approved'),
-(3, 2, 1, '2023-01-02', '2023-01-02 08:50:00', '2023-01-02 17:00:00', 8.17, 0, 'approved'),
-(4, 3, 3, '2023-01-02', '2023-01-02 09:30:00', '2023-01-02 17:45:00', 8.25, 30, 'approved'),
-(5, 4, 1, '2023-01-02', '2023-01-02 08:45:00', '2023-01-02 16:50:00', 8.08, 0, 'approved'),
-(6, 5, 6, '2023-01-02', NULL, NULL, 8.00, 0, 'approved'), -- Teletrabajo
-(7, 6, 1, '2023-01-03', '2023-01-03 09:05:00', '2023-01-03 17:10:00', 8.08, 5, 'approved'),
-(8, 7, 4, '2023-01-03', NULL, NULL, 0.00, 0, 'approved'), -- Falta justificada
-(9, 8, 7, '2023-01-03', NULL, NULL, 8.00, 0, 'approved'), -- Viaje de negocios
-(10, 9, 1, '2023-01-04', '2023-01-04 08:55:00', '2023-01-04 17:30:00', 8.58, 0, 'approved');
+INSERT INTO `attendances` (id, employee_id, attendance_type_id, date, check_in, check_out, worked_hours, late_minutes, status, created_at) VALUES
+(1, 1, 1, '2023-01-02', '2023-01-02 08:58:00', '2023-01-02 17:05:00', 8.12, 0, 'approved', NOW()),
+(2, 1, 1, '2023-01-03', '2023-01-03 09:15:00', '2023-01-03 17:10:00', 7.92, 15, 'approved', NOW()),
+(3, 2, 1, '2023-01-02', '2023-01-02 08:50:00', '2023-01-02 17:00:00', 8.17, 0, 'approved', NOW()),
+(4, 3, 3, '2023-01-02', '2023-01-02 09:30:00', '2023-01-02 17:45:00', 8.25, 30, 'approved', NOW()),
+(5, 4, 1, '2023-01-02', '2023-01-02 08:45:00', '2023-01-02 16:50:00', 8.08, 0, 'approved', NOW()),
+(6, 5, 6, '2023-01-02', NULL, NULL, 8.00, 0, 'approved', NOW()), -- Teletrabajo
+(7, 6, 1, '2023-01-03', '2023-01-03 09:05:00', '2023-01-03 17:10:00', 8.08, 5, 'approved', NOW()),
+(8, 7, 4, '2023-01-03', NULL, NULL, 0.00, 0, 'approved', NOW()), -- Falta justificada
+(9, 8, 7, '2023-01-03', NULL, NULL, 8.00, 0, 'approved', NOW()), -- Viaje de negocios
+(10, 9, 1, '2023-01-04', '2023-01-04 08:55:00', '2023-01-04 17:30:00', 8.58, 0, 'approved', NOW());
 
 -- Insertar tipos de ausencia básicos
-INSERT INTO `absence_types` (id, name, code, description, requires_approval, is_paid) VALUES
-(1, 'Licencia por Paternidad', 'LPAT', 'Licencia por nacimiento de hijo', 1, 1),
-(2, 'Licencia Sindical', 'LSIN', 'Licencia para actividades sindicales', 1, 0),
-(3, 'Licencia por Examen', 'LEXA', 'Licencia para rendir exámenes académicos', 1, 0),
-(4, 'Licencia sin Goce', 'LSGO', 'Licencia sin goce de haber', 1, 0),
-(5, 'Licencia por Donación', 'LDON', 'Licencia por donación de sangre/órganos', 1, 1),
-(6, 'Enfermedad', 'ENF', 'Ausencia por enfermedad', 1, 1),
-(7, 'Vacaciones', 'VAC', 'Días de vacaciones', 1, 1),
-(8, 'Permiso Personal', 'PER', 'Permiso personal remunerado', 1, 1),
-(9, 'Permiso No Remunerado', 'PNR', 'Permiso personal no remunerado', 1, 0),
-(10, 'Licencia Médica', 'LIC', 'Licencia médica prolongada', 1, 1);
+INSERT INTO `absence_types` (id, name, code, description, requires_approval, is_paid, created_at) VALUES
+(1, 'Licencia por Paternidad', 'LPAT', 'Licencia por nacimiento de hijo', 1, 1, NOW()),
+(2, 'Licencia Sindical', 'LSIN', 'Licencia para actividades sindicales', 1, 0, NOW()),
+(3, 'Licencia por Examen', 'LEXA', 'Licencia para rendir exámenes académicos', 1, 0, NOW()),
+(4, 'Licencia sin Goce', 'LSGO', 'Licencia sin goce de haber', 1, 0, NOW()),
+(5, 'Licencia por Donación', 'LDON', 'Licencia por donación de sangre/órganos', 1, 1, NOW()),
+(6, 'Enfermedad', 'ENF', 'Ausencia por enfermedad', 1, 1, NOW()),
+(7, 'Vacaciones', 'VAC', 'Días de vacaciones', 1, 1, NOW()),
+(8, 'Permiso Personal', 'PER', 'Permiso personal remunerado', 1, 1, NOW()),
+(9, 'Permiso No Remunerado', 'PNR', 'Permiso personal no remunerado', 1, 0, NOW()),
+(10, 'Licencia Médica', 'LIC', 'Licencia médica prolongada', 1, 1, NOW());
 
 -- Insertar solicitudes de asistencia
-INSERT INTO `absence_requests` (id, employee_id, absence_type_id, start_date, end_date, reason, status, approved_by) VALUES
-(1, 1, 2, '2023-02-10', '2023-02-10', 'Vacaciones programadas', 'approved', 1),
-(2, 2, 1, '2023-02-15', '2023-02-17', 'Cuadro gripal con fiebre', 'approved', 1),
-(3, 3, 3, '2023-03-01', '2023-03-01', 'Permiso personal para trámites', 'approved', 1),
-(4, 4, 6, '2023-03-05', '2023-03-05', 'Licencia por paternidad - nacimiento de hijo', 'approved', 1),
-(5, 5, 2, '2023-03-10', '2023-03-20', 'Vacaciones familiares', 'approved', 1),
-(6, 6, 1, '2023-04-01', '2023-04-03', 'Infección estomacal', 'approved', 1),
-(7, 7, 7, '2023-04-15', '2023-04-15', 'Reunión sindical', 'approved', 1),
-(8, 8, 4, '2023-05-02', '2023-05-02', 'Permiso no remunerado para mudanza', 'approved', 1),
-(9, 9, 8, '2023-05-10', '2023-05-10', 'Examen final de maestría', 'approved', 1),
-(10, 10, 5, '2023-05-15', '2023-05-15', 'Donación de sangre', 'approved', 1);
+INSERT INTO `absence_requests` (id, employee_id, absence_type_id, start_date, end_date, reason, status, approved_by, created_at) VALUES
+(1, 1, 2, '2023-02-10', '2023-02-10', 'Vacaciones programadas', 'approved', 1, NOW()),
+(2, 2, 1, '2023-02-15', '2023-02-17', 'Cuadro gripal con fiebre', 'approved', 1, NOW()),
+(3, 3, 3, '2023-03-01', '2023-03-01', 'Permiso personal para trámites', 'approved', 1, NOW()),
+(4, 4, 6, '2023-03-05', '2023-03-05', 'Licencia por paternidad - nacimiento de hijo', 'approved', 1, NOW()),
+(5, 5, 2, '2023-03-10', '2023-03-20', 'Vacaciones familiares', 'approved', 1, NOW()),
+(6, 6, 1, '2023-04-01', '2023-04-03', 'Infección estomacal', 'approved', 1, NOW()),
+(7, 7, 7, '2023-04-15', '2023-04-15', 'Reunión sindical', 'approved', 1, NOW()),
+(8, 8, 4, '2023-05-02', '2023-05-02', 'Permiso no remunerado para mudanza', 'approved', 1, NOW()),
+(9, 9, 8, '2023-05-10', '2023-05-10', 'Examen final de maestría', 'approved', 1, NOW()),
+(10, 10, 5, '2023-05-15', '2023-05-15', 'Donación de sangre', 'approved', 1, NOW());
 
 -- Insertar vacaciones
-INSERT INTO `vacations` (id, employee_id, start_date, end_date, days_taken, status, approved_by) VALUES
-(1, 1, '2023-06-01', '2023-06-10', 8, 'approved', 1),
-(2, 2, '2023-06-15', '2023-06-30', 12, 'approved', 1),
-(3, 3, '2023-07-01', '2023-07-07', 5, 'approved', 1),
-(4, 4, '2023-07-10', '2023-07-21', 10, 'approved', 1),
-(5, 5, '2023-08-01', '2023-08-14', 10, 'approved', 1),
-(6, 6, '2023-08-15', '2023-08-25', 7, 'approved', 1),
-(7, 7, '2023-09-01', '2023-09-08', 6, 'approved', 1),
-(8, 8, '2023-09-10', '2023-09-22', 9, 'approved', 1),
-(9, 9, '2023-10-01', '2023-10-06', 4, 'approved', 1),
-(10, 10, '2023-10-15', '2023-10-27', 9, 'approved', 1);
+INSERT INTO `vacations` (id, employee_id, start_date, end_date, days_taken, status, approved_by, created_at) VALUES
+(1, 1, '2023-06-01', '2023-06-10', 8, 'approved', 1, NOW()),
+(2, 2, '2023-06-15', '2023-06-30', 12, 'approved', 1, NOW()),
+(3, 3, '2023-07-01', '2023-07-07', 5, 'approved', 1, NOW()),
+(4, 4, '2023-07-10', '2023-07-21', 10, 'approved', 1, NOW()),
+(5, 5, '2023-08-01', '2023-08-14', 10, 'approved', 1, NOW()),
+(6, 6, '2023-08-15', '2023-08-25', 7, 'approved', 1, NOW()),
+(7, 7, '2023-09-01', '2023-09-08', 6, 'approved', 1, NOW()),
+(8, 8, '2023-09-10', '2023-09-22', 9, 'approved', 1, NOW()),
+(9, 9, '2023-10-01', '2023-10-06', 4, 'approved', 1, NOW()),
+(10, 10, '2023-10-15', '2023-10-27', 9, 'approved', 1, NOW());
 
 -- Insertar saldos de vacaciones
-INSERT INTO `vacation_balances` (id, employee_id, year, total_days, days_taken) VALUES
-(1, 1, 2023, 30, 8),
-(2, 2, 2023, 30, 12),
-(3, 3, 2023, 30, 5),
-(4, 4, 2023, 30, 10),
-(5, 5, 2023, 30, 10),
-(6, 6, 2023, 30, 7),
-(7, 7, 2023, 30, 6),
-(8, 8, 2023, 30, 9),
-(9, 9, 2023, 30, 4),
-(10, 10, 2023, 30, 9);
+INSERT INTO `vacation_balances` (id, employee_id, year, total_days, days_taken, created_at) VALUES
+(1, 1, 2023, 30, 8, NOW()),
+(2, 2, 2023, 30, 12, NOW()),
+(3, 3, 2023, 30, 5, NOW()),
+(4, 4, 2023, 30, 10, NOW()),
+(5, 5, 2023, 30, 10, NOW()),
+(6, 6, 2023, 30, 7, NOW()),
+(7, 7, 2023, 30, 6, NOW()),
+(8, 8, 2023, 30, 9, NOW()),
+(9, 9, 2023, 30, 4, NOW()),
+(10, 10, 2023, 30, 9, NOW());
 
 -- Insertar horario laboral estándar
-INSERT INTO `work_schedules` (id, name, description, is_default) VALUES
-(1, 'Horario Turnos Rotativos', 'Turnos rotativos mañana/tarde de 6 horas', 0),
-(2, 'Horario Medio Tiempo', 'Horario de medio tiempo (4 horas diarias)', 0),
-(3, 'Horario Oficina Estándar', 'Lunes a Viernes de 9:00 a 18:00 con 1 hora de almuerzo', 1);
+INSERT INTO `work_schedules` (id, name, description, is_default, created_at) VALUES
+(1, 'Horario Turnos Rotativos', 'Turnos rotativos mañana/tarde de 6 horas', 0, NOW()),
+(2, 'Horario Medio Tiempo', 'Horario de medio tiempo (4 horas diarias)', 0, NOW()),
+(3, 'Horario Oficina Estándar', 'Lunes a Viernes de 9:00 a 18:00 con 1 hora de almuerzo', 1, NOW());
 
 -- Insertar detalles del horario estándar
-INSERT INTO `schedule_details` (id, schedule_id, day_of_week, start_time, end_time, is_working_day) VALUES
-(1, 2, 1, '08:00:00', '14:00:00', 1), -- Lunes mañana
-(2, 2, 1, '14:00:00', '20:00:00', 1), -- Lunes tarde
-(3, 2, 2, '08:00:00', '14:00:00', 1), -- Martes mañana
-(4, 2, 2, '14:00:00', '20:00:00', 1), -- Martes tarde
-(5, 2, 3, '08:00:00', '14:00:00', 1), -- Miércoles mañana
-(6, 2, 3, '14:00:00', '20:00:00', 1), -- Miércoles tarde
-(7, 2, 4, '08:00:00', '14:00:00', 1), -- Jueves mañana
-(8, 2, 4, '14:00:00', '20:00:00', 1), -- Jueves tarde
-(9, 2, 5, '08:00:00', '14:00:00', 1), -- Viernes mañana
-(10, 2, 5, '14:00:00', '20:00:00', 1), -- Viernes tarde
-(11, 2, 6, '00:00:00', '00:00:00', 0), -- Sábado
-(12, 2, 0, '00:00:00', '00:00:00', 0), -- Domingo
+INSERT INTO `schedule_details` (id, schedule_id, day_of_week, start_time, end_time, is_working_day, created_at) VALUES
+(1, 2, 1, '08:00:00', '14:00:00', 1, NOW()), -- Lunes mañana
+(2, 2, 1, '14:00:00', '20:00:00', 1, NOW()), -- Lunes tarde
+(3, 2, 2, '08:00:00', '14:00:00', 1, NOW()), -- Martes mañana
+(4, 2, 2, '14:00:00', '20:00:00', 1, NOW()), -- Martes tarde
+(5, 2, 3, '08:00:00', '14:00:00', 1, NOW()), -- Miércoles mañana
+(6, 2, 3, '14:00:00', '20:00:00', 1, NOW()), -- Miércoles tarde
+(7, 2, 4, '08:00:00', '14:00:00', 1, NOW()), -- Jueves mañana
+(8, 2, 4, '14:00:00', '20:00:00', 1, NOW()), -- Jueves tarde
+(9, 2, 5, '08:00:00', '14:00:00', 1, NOW()), -- Viernes mañana
+(10, 2, 5, '14:00:00', '20:00:00', 1, NOW()), -- Viernes tarde
+(11, 2, 6, '00:00:00', '00:00:00', 0, NOW()), -- Sábado
+(12, 2, 0, '00:00:00', '00:00:00', 0, NOW()), -- Domingo
 -- Horario Medio Tiempo
-(13, 3, 1, '09:00:00', '13:00:00', 1), -- Lunes
-(14, 3, 2, '09:00:00', '13:00:00', 1), -- Martes
-(15, 3, 3, '09:00:00', '13:00:00', 1), -- Miércoles
-(16, 3, 4, '09:00:00', '13:00:00', 1), -- Jueves
-(17, 3, 5, '09:00:00', '13:00:00', 1), -- Viernes
-(18, 3, 6, '00:00:00', '00:00:00', 0), -- Sábado
-(19, 3, 0, '00:00:00', '00:00:00', 0); -- Domingo
+(13, 3, 1, '09:00:00', '13:00:00', 1, NOW()), -- Lunes
+(14, 3, 2, '09:00:00', '13:00:00', 1, NOW()), -- Martes
+(15, 3, 3, '09:00:00', '13:00:00', 1, NOW()), -- Miércoles
+(16, 3, 4, '09:00:00', '13:00:00', 1, NOW()), -- Jueves
+(17, 3, 5, '09:00:00', '13:00:00', 1, NOW()), -- Viernes
+(18, 3, 6, '00:00:00', '00:00:00', 0, NOW()), -- Sábado
+(19, 3, 0, '00:00:00', '00:00:00', 0, NOW()); -- Domingo
 
 -- Insertar horarios de empleados
-INSERT INTO `employee_schedules` (id, employee_id, schedule_id, effective_date) VALUES
-(1, 1, 1, '2023-01-01'),
-(2, 2, 1, '2023-01-01'),
-(3, 3, 1, '2023-01-01'),
-(4, 4, 1, '2023-01-01'),
-(5, 5, 1, '2023-01-01'),
-(6, 6, 2, '2023-01-01'),
-(7, 7, 2, '2023-01-01'),
-(8, 8, 1, '2023-01-01'),
-(9, 9, 3, '2023-01-01'),
-(10, 10, 1, '2023-01-01');
+INSERT INTO `employee_schedules` (id, employee_id, schedule_id, effective_date, created_at) VALUES
+(1, 1, 1, '2023-01-01', NOW()),
+(2, 2, 1, '2023-01-01', NOW()),
+(3, 3, 1, '2023-01-01', NOW()),
+(4, 4, 1, '2023-01-01', NOW()),
+(5, 5, 1, '2023-01-01', NOW()),
+(6, 6, 2, '2023-01-01', NOW()),
+(7, 7, 2, '2023-01-01', NOW()),
+(8, 8, 1, '2023-01-01', NOW()),
+(9, 9, 3, '2023-01-01', NOW()),
+(10, 10, 1, '2023-01-01', NOW());
 
 -- Insertar vacaciones
-INSERT INTO `holidays` (id, name, date, recurring, status) VALUES
-(1, 'Año Nuevo', '2023-01-01', 1, 1),
-(2, 'Jueves Santo', '2023-04-06', 0, 1),
-(3, 'Viernes Santo', '2023-04-07', 0, 1),
-(4, 'Día del Trabajo', '2023-05-01', 1, 1),
-(5, 'San Pedro y San Pablo', '2023-06-29', 1, 1),
-(6, 'Fiestas Patrias', '2023-07-28', 1, 1),
-(7, 'Fiestas Patrias', '2023-07-29', 1, 1),
-(8, 'Santa Rosa de Lima', '2023-08-30', 1, 1),
-(9, 'Combate de Angamos', '2023-10-08', 1, 1),
-(10, 'Navidad', '2023-12-25', 1, 1);
+INSERT INTO `holidays` (id, name, date, recurring, status, created_at) VALUES
+(1, 'Año Nuevo', '2023-01-01', 1, 1, NOW()),
+(2, 'Jueves Santo', '2023-04-06', 0, 1, NOW()),
+(3, 'Viernes Santo', '2023-04-07', 0, 1, NOW()),
+(4, 'Día del Trabajo', '2023-05-01', 1, 1, NOW()),
+(5, 'San Pedro y San Pablo', '2023-06-29', 1, 1, NOW()),
+(6, 'Fiestas Patrias', '2023-07-28', 1, 1, NOW()),
+(7, 'Fiestas Patrias', '2023-07-29', 1, 1, NOW()),
+(8, 'Santa Rosa de Lima', '2023-08-30', 1, 1, NOW()),
+(9, 'Combate de Angamos', '2023-10-08', 1, 1, NOW()),
+(10, 'Navidad', '2023-12-25', 1, 1, NOW());
 
 -- Insertar solicitudes de tiempo extra
-INSERT INTO `overtime_requests` (id, employee_id, date, start_time, end_time, reason, status, approved_by) VALUES
-(1, 1, '2023-01-05', '18:00:00', '20:30:00', 'Terminar reporte mensual', 'approved', 1),
-(2, 2, '2023-01-10', '18:00:00', '21:00:00', 'Revisión de inventario', 'approved', 1),
-(3, 3, '2023-02-15', '18:00:00', '19:30:00', 'Preparación de auditoría', 'approved', 1),
-(4, 4, '2023-02-20', '18:00:00', '20:00:00', 'Implementación nuevo sistema', 'approved', 1),
-(5, 5, '2023-03-01', '18:00:00', '22:00:00', 'Cierre fiscal', 'approved', 1),
-(6, 6, '2023-03-10', '14:00:00', '18:00:00', 'Capacitación personal nuevo', 'approved', 1),
-(7, 7, '2023-04-05', '18:00:00', '21:00:00', 'Mantenimiento servidores', 'approved', 1),
-(8, 8, '2023-04-12', '18:00:00', '20:00:00', 'Migración de datos', 'approved', 1),
-(9, 9, '2023-05-03', '13:00:00', '17:00:00', 'Evento corporativo', 'approved', 1),
-(10, 10, '2023-05-15', '18:00:00', '23:00:00', 'Lanzamiento de producto', 'approved', 1);
+INSERT INTO `overtime_requests` (id, employee_id, date, start_time, end_time, reason, status, approved_by, created_at) VALUES
+(1, 1, '2023-01-05', '18:00:00', '20:30:00', 'Terminar reporte mensual', 'approved', 1, NOW()),
+(2, 2, '2023-01-10', '18:00:00', '21:00:00', 'Revisión de inventario', 'approved', 1, NOW()),
+(3, 3, '2023-02-15', '18:00:00', '19:30:00', 'Preparación de auditoría', 'approved', 1, NOW()),
+(4, 4, '2023-02-20', '18:00:00', '20:00:00', 'Implementación nuevo sistema', 'approved', 1, NOW()),
+(5, 5, '2023-03-01', '18:00:00', '22:00:00', 'Cierre fiscal', 'approved', 1, NOW()),
+(6, 6, '2023-03-10', '14:00:00', '18:00:00', 'Capacitación personal nuevo', 'approved', 1, NOW()),
+(7, 7, '2023-04-05', '18:00:00', '21:00:00', 'Mantenimiento servidores', 'approved', 1, NOW()),
+(8, 8, '2023-04-12', '18:00:00', '20:00:00', 'Migración de datos', 'approved', 1, NOW()),
+(9, 9, '2023-05-03', '13:00:00', '17:00:00', 'Evento corporativo', 'approved', 1, NOW()),
+(10, 10, '2023-05-15', '18:00:00', '23:00:00', 'Lanzamiento de producto', 'approved', 1, NOW());
 
 -- Insertar nóminas
-INSERT INTO `payrolls` (id, reference, period_start, period_end, payment_date, status, created_by) VALUES
-(1, 'NOM-202301', '2023-01-01', '2023-01-31', '2023-02-05', 'paid', 1),
-(2, 'NOM-202302', '2023-02-01', '2023-02-28', '2023-03-05', 'paid', 1),
-(3, 'NOM-202303', '2023-03-01', '2023-03-31', '2023-04-05', 'paid', 1),
-(4, 'NOM-202304', '2023-04-01', '2023-04-30', '2023-05-05', 'paid', 1),
-(5, 'NOM-202305', '2023-05-01', '2023-05-31', '2023-06-05', 'paid', 1),
-(6, 'NOM-202306', '2023-06-01', '2023-06-30', '2023-07-05', 'paid', 1),
-(7, 'NOM-202307', '2023-07-01', '2023-07-31', '2023-08-05', 'paid', 1),
-(8, 'NOM-202308', '2023-08-01', '2023-08-31', '2023-09-05', 'paid', 1),
-(9, 'NOM-202309', '2023-09-01', '2023-09-30', '2023-10-05', 'paid', 1),
-(10, 'NOM-202310', '2023-10-01', '2023-10-31', '2023-11-05', 'paid', 1);
+INSERT INTO `payrolls` (id, reference, period_start, period_end, payment_date, status, created_by, created_at) VALUES
+(1, 'NOM-202301', '2023-01-01', '2023-01-31', '2023-02-05', 'paid', 1, NOW()),
+(2, 'NOM-202302', '2023-02-01', '2023-02-28', '2023-03-05', 'paid', 1, NOW()),
+(3, 'NOM-202303', '2023-03-01', '2023-03-31', '2023-04-05', 'paid', 1, NOW()),
+(4, 'NOM-202304', '2023-04-01', '2023-04-30', '2023-05-05', 'paid', 1, NOW()),
+(5, 'NOM-202305', '2023-05-01', '2023-05-31', '2023-06-05', 'paid', 1, NOW()),
+(6, 'NOM-202306', '2023-06-01', '2023-06-30', '2023-07-05', 'paid', 1, NOW()),
+(7, 'NOM-202307', '2023-07-01', '2023-07-31', '2023-08-05', 'paid', 1, NOW()),
+(8, 'NOM-202308', '2023-08-01', '2023-08-31', '2023-09-05', 'paid', 1, NOW()),
+(9, 'NOM-202309', '2023-09-01', '2023-09-30', '2023-10-05', 'paid', 1, NOW()),
+(10, 'NOM-202310', '2023-10-01', '2023-10-31', '2023-11-05', 'paid', 1, NOW());
 
 -- Insertar detalles de nóminas
-INSERT INTO `payroll_details` (id, payroll_id, employee_id, base_salary, days_worked, hours_worked, overtime_hours, overtime_pay, net_pay, status) VALUES
-(1, 1, 1, 4500.00, 22, 176.0, 2.5, 168.75, 4668.75, 'paid'),
-(2, 1, 2, 7500.00, 22, 176.0, 3.0, 506.25, 8006.25, 'paid'),
-(3, 1, 3, 4800.00, 21, 168.0, 1.5, 108.00, 4908.00, 'paid'),
-(4, 1, 4, 5500.00, 22, 176.0, 2.0, 185.00, 5685.00, 'paid'),
-(5, 1, 5, 3200.00, 20, 160.0, 4.0, 192.00, 3392.00, 'paid'),
-(6, 1, 6, 4600.00, 22, 132.0, 4.0, 276.00, 4876.00, 'paid'),
-(7, 1, 7, 5200.00, 21, 126.0, 3.0, 312.00, 5512.00, 'paid'),
-(8, 1, 8, 12000.00, 22, 176.0, 2.0, 900.00, 12900.00, 'paid'),
-(9, 1, 9, 1800.00, 22, 88.0, 4.0, 108.00, 1908.00, 'paid'),
-(10, 1, 10, 6800.00, 22, 176.0, 5.0, 637.50, 7437.50, 'paid');
+INSERT INTO `payroll_details` (id, payroll_id, employee_id, base_salary, days_worked, hours_worked, overtime_hours, overtime_pay, net_pay, status, created_at) VALUES
+(1, 1, 1, 4500.00, 22, 176.0, 2.5, 168.75, 4668.75, 'paid', NOW()),
+(2, 1, 2, 7500.00, 22, 176.0, 3.0, 506.25, 8006.25, 'paid', NOW()),
+(3, 1, 3, 4800.00, 21, 168.0, 1.5, 108.00, 4908.00, 'paid', NOW()),
+(4, 1, 4, 5500.00, 22, 176.0, 2.0, 185.00, 5685.00, 'paid', NOW()),
+(5, 1, 5, 3200.00, 20, 160.0, 4.0, 192.00, 3392.00, 'paid', NOW()),
+(6, 1, 6, 4600.00, 22, 132.0, 4.0, 276.00, 4876.00, 'paid', NOW()),
+(7, 1, 7, 5200.00, 21, 126.0, 3.0, 312.00, 5512.00, 'paid', NOW()),
+(8, 1, 8, 12000.00, 22, 176.0, 2.0, 900.00, 12900.00, 'paid', NOW()),
+(9, 1, 9, 1800.00, 22, 88.0, 4.0, 108.00, 1908.00, 'paid', NOW()),
+(10, 1, 10, 6800.00, 22, 176.0, 5.0, 637.50, 7437.50, 'paid', NOW());
 
 -- Insertar beneficios de empleados
-INSERT INTO `employee_benefits` (id, employee_id, benefit_type, description, amount, start_date) VALUES
-(1, 1, 'Seguro Médico', 'Cobertura médica familiar', 250.00, '2023-01-01'),
-(2, 2, 'Seguro Médico', 'Cobertura médica premium', 350.00, '2023-01-01'),
-(3, 3, 'Vale de Almuerzo', 'Subsidio alimentario mensual', 150.00, '2023-01-01'),
-(4, 4, 'Vale de Almuerzo', 'Subsidio alimentario mensual', 150.00, '2023-01-01'),
-(5, 5, 'Seguro de Vida', 'Seguro de vida grupo', 100.00, '2023-01-01'),
-(6, 6, 'Celular Corporativo', 'Plan de datos y llamadas', 120.00, '2023-01-01'),
-(7, 7, 'Gimnasio', 'Membresía corporativa', 80.00, '2023-01-01'),
-(8, 8, 'Auto Empresa', 'Vehículo corporativo', 800.00, '2023-01-01'),
-(9, 9, 'Vale de Almuerzo', 'Subsidio alimentario mensual', 150.00, '2023-01-01'),
-(10, 10, 'Seguro Médico', 'Cobertura médica familiar', 250.00, '2023-01-01');
+INSERT INTO `employee_benefits` (id, employee_id, benefit_type, description, amount, start_date, created_at) VALUES
+(1, 1, 'Seguro Médico', 'Cobertura médica familiar', 250.00, '2023-01-01', NOW()),
+(2, 2, 'Seguro Médico', 'Cobertura médica premium', 350.00, '2023-01-01', NOW()),
+(3, 3, 'Vale de Almuerzo', 'Subsidio alimentario mensual', 150.00, '2023-01-01', NOW()),
+(4, 4, 'Vale de Almuerzo', 'Subsidio alimentario mensual', 150.00, '2023-01-01', NOW()),
+(5, 5, 'Seguro de Vida', 'Seguro de vida grupo', 100.00, '2023-01-01', NOW()),
+(6, 6, 'Celular Corporativo', 'Plan de datos y llamadas', 120.00, '2023-01-01', NOW()),
+(7, 7, 'Gimnasio', 'Membresía corporativa', 80.00, '2023-01-01', NOW()),
+(8, 8, 'Auto Empresa', 'Vehículo corporativo', 800.00, '2023-01-01', NOW()),
+(9, 9, 'Vale de Almuerzo', 'Subsidio alimentario mensual', 150.00, '2023-01-01', NOW()),
+(10, 10, 'Seguro Médico', 'Cobertura médica familiar', 250.00, '2023-01-01', NOW());
 
 -- Insertar revisiones de rendimiento
-INSERT INTO `performance_reviews` (id, employee_id, reviewer_id, review_date, next_review_date, performance_score, strengths, areas_for_improvement, status) VALUES
-(1, 1, 1, '2023-06-15', '2023-12-15', 4, 'Excelente trabajo en equipo, proactivo', 'Mejorar presentaciones ejecutivas', 'completed'),
-(2, 2, 1, '2023-06-16', '2023-12-16', 5, 'Liderazgo excepcional, resultados consistentes', 'Manejo de estrés en picos de trabajo', 'completed'),
-(3, 3, 1, '2023-06-17', '2023-12-17', 3, 'Creatividad en soluciones, puntualidad', 'Necesita más iniciativa en proyectos', 'completed'),
-(4, 4, 1, '2023-06-18', '2023-12-18', 4, 'Gran capacidad analítica, detallista', 'Comunicación más asertiva con pares', 'completed'),
-(5, 5, 1, '2023-06-19', '2023-12-19', 3, 'Buen manejo de clientes, empático', 'Profundizar conocimiento técnico', 'completed'),
-(6, 6, 1, '2023-06-20', '2023-12-20', 4, 'Alto rendimiento bajo presión', 'Mejorar documentación de procesos', 'completed'),
-(7, 7, 1, '2023-06-21', '2023-12-21', 5, 'Innovación constante, mentoría', 'Equilibrar perfeccionismo con productividad', 'completed'),
-(8, 8, 1, '2023-06-22', '2023-12-22', 5, 'Visión estratégica, toma de decisiones', 'Delegar más responsabilidades', 'completed'),
-(9, 9, 1, '2023-06-23', '2023-12-23', 3, 'Actitud positiva, aprendizaje rápido', 'Mayor autonomía en tareas', 'completed'),
-(10, 10, 1, '2023-06-24', '2023-12-24', 4, 'Excelente manejo de proyectos complejos', 'Mejorar estimación de tiempos', 'completed');
+INSERT INTO `performance_reviews` (id, employee_id, reviewer_id, review_date, next_review_date, performance_score, strengths, areas_for_improvement, status, created_at) VALUES
+(1, 1, 1, '2023-06-15', '2023-12-15', 4, 'Excelente trabajo en equipo, proactivo', 'Mejorar presentaciones ejecutivas', 'completed', NOW()),
+(2, 2, 1, '2023-06-16', '2023-12-16', 5, 'Liderazgo excepcional, resultados consistentes', 'Manejo de estrés en picos de trabajo', 'completed', NOW()),
+(3, 3, 1, '2023-06-17', '2023-12-17', 3, 'Creatividad en soluciones, puntualidad', 'Necesita más iniciativa en proyectos', 'completed', NOW()),
+(4, 4, 1, '2023-06-18', '2023-12-18', 4, 'Gran capacidad analítica, detallista', 'Comunicación más asertiva con pares', 'completed', NOW()),
+(5, 5, 1, '2023-06-19', '2023-12-19', 3, 'Buen manejo de clientes, empático', 'Profundizar conocimiento técnico', 'completed', NOW()),
+(6, 6, 1, '2023-06-20', '2023-12-20', 4, 'Alto rendimiento bajo presión', 'Mejorar documentación de procesos', 'completed', NOW()),
+(7, 7, 1, '2023-06-21', '2023-12-21', 5, 'Innovación constante, mentoría', 'Equilibrar perfeccionismo con productividad', 'completed', NOW()),
+(8, 8, 1, '2023-06-22', '2023-12-22', 5, 'Visión estratégica, toma de decisiones', 'Delegar más responsabilidades', 'completed', NOW()),
+(9, 9, 1, '2023-06-23', '2023-12-23', 3, 'Actitud positiva, aprendizaje rápido', 'Mayor autonomía en tareas', 'completed', NOW()),
+(10, 10, 1, '2023-06-24', '2023-12-24', 4, 'Excelente manejo de proyectos complejos', 'Mejorar estimación de tiempos', 'completed', NOW());
 
 -- Insertar incidencias de empleados
-INSERT INTO `employee_incidents` (id, employee_id, incident_type, incident_date, observation, discount, total_to_pay, reported_by, status) VALUES
-(1, 3, 'Retraso frecuente', '2023-02-10', '5 retrasos en 2 semanas', 100, 1400, 1, 'resolved'),
-(2, 5, 'Conflicto interpersonal', '2023-03-15', 'Discusión acalorada con compañero', 100, 1400, 1, 'resolved'),
-(3, 7, 'Error en proceso', '2023-04-05', 'Error en reporte financiero', 100, 1400, 1, 'resolved'),
-(4, 1, 'Uso indebido de recursos', '2023-04-20', 'Uso excesivo de impresora para personal', 100, 1400, 1, 'closed'),
-(5, 9, 'Ausencia no comunicada', '2023-05-02', 'No asistió sin aviso previo', 100, 1400, 1, 'resolved'),
-(6, 2, 'Violación política', '2023-05-10', 'Compartió credenciales de acceso', 100, 1400, 1, 'investigating'),
-(7, 4, 'Accidente laboral', '2023-06-01', 'Caída en escaleras', 100, 1400, 1, 'resolved'),
-(8, 6, 'Maltrato a subordinado', '2023-06-15', 'Comentarios inapropiados a practicante', 100, 1400, 1, 'investigating'),
-(9, 10, 'Fuga información', '2023-07-03', 'Envió datos confidenciales a personal externo', 100, 1400, 1, 'open'),
-(10, 8, 'Conflicto de interés', '2023-07-10', 'Trabajo paralelo con competidor', 100, 1400, 1, 'investigating');
+INSERT INTO `employee_incidents` (id, employee_id, incident_type, incident_date, observation, discount, total_to_pay, reported_by, status, created_at) VALUES
+(1, 3, 'Retraso frecuente', '2023-02-10', '5 retrasos en 2 semanas', 100, 1400, 1, 'resolved', NOW()),
+(2, 5, 'Conflicto interpersonal', '2023-03-15', 'Discusión acalorada con compañero', 100, 1400, 1, 'resolved', NOW()),
+(3, 7, 'Error en proceso', '2023-04-05', 'Error en reporte financiero', 100, 1400, 1, 'resolved', NOW()),
+(4, 1, 'Uso indebido de recursos', '2023-04-20', 'Uso excesivo de impresora para personal', 100, 1400, 1, 'closed', NOW()),
+(5, 9, 'Ausencia no comunicada', '2023-05-02', 'No asistió sin aviso previo', 100, 1400, 1, 'resolved', NOW()),
+(6, 2, 'Violación política', '2023-05-10', 'Compartió credenciales de acceso', 100, 1400, 1, 'investigating', NOW()),
+(7, 4, 'Accidente laboral', '2023-06-01', 'Caída en escaleras', 100, 1400, 1, 'resolved', NOW()),
+(8, 6, 'Maltrato a subordinado', '2023-06-15', 'Comentarios inapropiados a practicante', 100, 1400, 1, 'investigating', NOW()),
+(9, 10, 'Fuga información', '2023-07-03', 'Envió datos confidenciales a personal externo', 100, 1400, 1, 'open', NOW()),
+(10, 8, 'Conflicto de interés', '2023-07-10', 'Trabajo paralelo con competidor', 100, 1400, 1, 'investigating', NOW());

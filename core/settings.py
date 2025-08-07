@@ -62,6 +62,21 @@ PROJECT_APPS = [
     'apps.users',
     'apps.warehouses',
     'apps.work_areas',
+    'apps.attendance_types',
+    'apps.attendances',
+    'apps.absence_types',
+    'apps.absence_requests',
+    'apps.vacations',
+    'apps.vacation_balances',
+    'apps.work_schedules',
+    'apps.schedule_details',
+    'apps.employee_schedules',
+    'apps.holidays',
+    'apps.overtime_requests',
+    'apps.payrolls',
+    'apps.employee_benefits',
+    'apps.performance_reviews',
+    'apps.employee_incidents',
 ]
 
 THIRD_PARTY_APPS = [

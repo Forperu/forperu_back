@@ -4,6 +4,8 @@ from apps.companies.serializers import CompanySerializer
 
 class BranchOfficeSerializer(serializers.ModelSerializer):
   company = serializers.SerializerMethodField()
+  company_id = serializers.IntegerField()
+  status = serializers.IntegerField()
 
   class Meta:
     model = BranchOffice

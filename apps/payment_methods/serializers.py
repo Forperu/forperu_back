@@ -2,6 +2,7 @@ from rest_framework import serializers
 from apps.payment_methods.models import PaymentMethod
 
 class PaymentMethodSerializer(serializers.ModelSerializer):
+  status = serializers.IntegerField()
 
   class Meta:
     model = PaymentMethod

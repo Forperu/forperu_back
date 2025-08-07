@@ -6,6 +6,8 @@ from apps.warehouses.serializers import WarehouseSerializer
 class EmployeeSerializer(serializers.ModelSerializer):
   warehouse = serializers.SerializerMethodField()
   job_position = serializers.SerializerMethodField()
+  gender = serializers.IntegerField()
+  status = serializers.IntegerField()
 
   class Meta:
     model = Employee

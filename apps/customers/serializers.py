@@ -2,6 +2,7 @@ from rest_framework import serializers
 from apps.customers.models import Customer
 
 class CustomerSerializer(serializers.ModelSerializer):
+  status = serializers.IntegerField()
 
   class Meta:
     model = Customer
@@ -10,6 +11,7 @@ class CustomerSerializer(serializers.ModelSerializer):
       'names',
       'surname',
       'second_surname',
+      'company_name',
       'document_type',
       'document_number',
       'email',
