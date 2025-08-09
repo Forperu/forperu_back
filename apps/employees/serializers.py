@@ -5,8 +5,9 @@ from apps.warehouses.serializers import WarehouseSerializer
 
 class EmployeeSerializer(serializers.ModelSerializer):
   warehouse = serializers.SerializerMethodField()
+  warehouse_id = serializers.IntegerField(required=False, allow_null=True)
   job_position = serializers.SerializerMethodField()
-  gender = serializers.IntegerField()
+  job_position_id = serializers.IntegerField(required=False, allow_null=True)
   status = serializers.IntegerField()
 
   class Meta:
@@ -38,12 +39,10 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
   def get_warehouse(self, obj):
     if obj.warehouse:
-      WarehouseSerializer.Meta.model = obj.warehouse.__class__
       return WarehouseSerializer(obj.warehouse).data
     return None
 
   def get_job_position(self, obj):
     if obj.job_position:
-      JobPositionSerializer.Meta.model = obj.job_position.__class__
       return JobPositionSerializer(obj.job_position).data
     return None

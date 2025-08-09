@@ -15,7 +15,7 @@ class UserAccountAdmin(UserAdmin):
     (None, {'fields': ('email', 'password')}),
     ('Personal Info', {
       'fields': (
-        'username', 'company_id', 'role_id', 'employee_id',
+        'username', 'company', 'role', 'employee',
         'avatar', 'settings', 'shortcuts'
       )
     }),

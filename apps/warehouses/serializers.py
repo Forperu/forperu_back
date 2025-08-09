@@ -18,6 +18,7 @@ class WarehouseSerializer(serializers.ModelSerializer):
       'company_id',
       'branch_office',
       'branch_office_id',
+      'company_or_branch_office',
       'name',
       'description',
       'address',
@@ -32,10 +33,12 @@ class WarehouseSerializer(serializers.ModelSerializer):
 
   def get_company(self, obj):
     if obj.company:
+      CompanySerializer.Meta.model = obj.company.__class__
       return CompanySerializer(obj.company).data
     return None
 
   def get_branch_office(self, obj):
     if obj.branch_office:
+      BranchOfficeSerializer.Meta.model = obj.branch_office.__class__
       return BranchOfficeSerializer(obj.branch_office).data
     return None

@@ -8,7 +8,7 @@ class Company(models.Model):
   email = models.CharField(max_length=255, null=True, blank=True)
   phone = models.CharField(max_length=15, null=True, blank=True)
   web_site = models.CharField(max_length=100, null=True, blank=True)
-  address = models.TextField()
+  address = models.TextField(null=True, blank=True)
   status = models.BooleanField(default=1)
   created_by = models.ForeignKey(
     'users.UserAccount',

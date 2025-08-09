@@ -7,6 +7,7 @@ from apps.companies.models import Company
 class Warehouse(models.Model):
   company = models.ForeignKey(Company, on_delete=models.CASCADE, db_column='company_id', null=True, blank=True)
   branch_office = models.ForeignKey(BranchOffice, on_delete=models.CASCADE, db_column='branch_office_id', null=True, blank=True)
+  company_or_branch_office = models.BooleanField(default=1)
   name = models.CharField(max_length=200)
   description = models.TextField(null=True, blank=True)
   address = models.TextField(null=True, blank=True)
