@@ -4,9 +4,7 @@ from apps.employees.serializers import EmployeeSerializer
 
 class EmployeeIncidentSerializer(serializers.ModelSerializer):
   employee = serializers.SerializerMethodField()
-  reported_by = serializers.SerializerMethodField()
   employee_id = serializers.IntegerField()
-  reported_by_id = serializers.IntegerField()
   
   class Meta:
     model = EmployeeIncident
@@ -19,7 +17,6 @@ class EmployeeIncidentSerializer(serializers.ModelSerializer):
       'observation',
       'discount',
       'total_to_pay',
-      'reported_by_id',
       'reported_by',
       'status',
       'resolved_at',
@@ -32,10 +29,4 @@ class EmployeeIncidentSerializer(serializers.ModelSerializer):
     if obj.employee:
       EmployeeSerializer.Meta.model = obj.employee.__class__
       return EmployeeSerializer(obj.employee).data
-    return None
-  
-  def get_reported_by(self, obj):
-    if obj.reported_by:
-      EmployeeSerializer.Meta.model = obj.reported_by.__class__
-      return EmployeeSerializer(obj.reported_by).data
     return None
