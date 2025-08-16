@@ -13,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import JSONParser, FormParser, MultiPartParser
 from django.utils import timezone
 
+from apps.prices.models import Price
 from apps.products.models import Product
 from apps.products.serializers import ProductSerializer
 from utils.parse_excel import parse_excel
@@ -44,7 +45,19 @@ class CreateProductView(APIView):
     serializer = ProductSerializer(data=request.data)
 
     if serializer.is_valid():
-      serializer.save(created_by=request.user)
+      new_product = serializer.save(created_by=request.user)
+
+      # Crear registro en prices automáticamente al crear producto
+      Price.objects.create(
+        product=new_product,
+        cost=new_product.cost,
+        price_cf=new_product.featured_pcf,
+        price_sf=new_product.featured_psf,
+        price_box=new_product.featured_pbox,
+        created_by=request.user,
+        updated_by=request.user,
+      )
+
       return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -55,10 +68,27 @@ class UpdateProductView(APIView):
 
   def put(self, request, pk, format=None):
     product = get_object_or_404(Product, pk=pk, deleted_at__isnull=True)
+    old_cost = product.cost  # Guardamos el costo antes de la actualización
+
     serializer = ProductSerializer(product, data=request.data, partial=True)
 
     if serializer.is_valid():
-      serializer.save(updated_by=request.user)
+      updated_product = serializer.save(updated_by=request.user)
+
+      # Comparar si el cost fue modificado
+      new_cost = updated_product.cost
+      if "cost" in request.data and str(old_cost) != str(new_cost):
+        # Crear nuevo registro en prices
+        Price.objects.create(
+          product=updated_product,
+          cost=new_cost,
+          price_cf=updated_product.featured_pcf,
+          price_sf=updated_product.featured_psf,
+          price_box=updated_product.featured_pbox,
+          created_by=request.user,
+          updated_by=request.user,
+        )
+
       return Response(serializer.data, status=status.HTTP_200_OK)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

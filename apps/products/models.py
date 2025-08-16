@@ -1,6 +1,7 @@
 from django.db import models
 
 from apps.brands.models import Brand
+from apps.categories.models import Category
 from apps.units_of_measurement.models import UnitOfMeasurement
 
 class PriceProducts(models.Model):
@@ -58,6 +59,28 @@ class Product(models.Model):
   updated_at = models.DateTimeField(null=True, blank=True)
   deleted_at = models.DateTimeField(null=True, blank=True)
 
+  categories = models.ManyToManyField(
+    Category,
+    through='ProductCategory',
+    related_name='products'
+  )
+
   class Meta:
     managed = True
     db_table = 'products'
+
+class ProductCategory(models.Model):
+  product = models.ForeignKey(
+    Product,
+    on_delete=models.CASCADE,
+    related_name='product_categories'
+  )
+  category = models.ForeignKey(
+    Category,
+    on_delete=models.CASCADE,
+    related_name='product_categories'
+  )
+  
+  class Meta:
+    db_table = 'product_categories'
+    unique_together = ('product', 'category')

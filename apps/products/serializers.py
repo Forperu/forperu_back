@@ -1,8 +1,23 @@
 from rest_framework import serializers
 from apps.brands.serializers import BrandSerializer
-from apps.products.models import Product
+from apps.categories.serializers import CategorySerializer
+from apps.products.models import Product, ProductCategory
 from apps.units_of_measurement.serializers import UnitOfMeasurementSerializer
 
+class ProductCategorySerializer(serializers.ModelSerializer):
+  category = serializers.SerializerMethodField()
+  category_id = serializers.IntegerField(write_only=True)
+
+  class Meta:
+    model = ProductCategory
+    fields = ['id', 'category', 'category_id', 'product']
+
+  def get_category(self, obj):
+    if obj.category:
+      CategorySerializer.Meta.model = obj.category.__class__
+      return CategorySerializer(obj.category).data
+    return None
+    
 class ProductSerializer(serializers.ModelSerializer):
   brand = serializers.SerializerMethodField()
   unit_of_measurement = serializers.SerializerMethodField()
@@ -59,3 +74,25 @@ class ProductSerializer(serializers.ModelSerializer):
       UnitOfMeasurementSerializer.Meta.model = obj.unit_of_measurement.__class__
       return UnitOfMeasurementSerializer(obj.unit_of_measurement).data
     return None
+  
+  def get_categories(self, obj):
+    categories = obj.categories.all()
+    return CategorySerializer(categories, many=True).data
+
+  def create(self, validated_data):
+    category_ids = validated_data.pop('category_ids', [])
+    product = super().create(validated_data)
+    
+    if category_ids:
+      product.categories.set(category_ids)
+    
+    return product
+
+  def update(self, instance, validated_data):
+    category_ids = validated_data.pop('category_ids', None)
+    product = super().update(instance, validated_data)
+    
+    if category_ids is not None:
+      product.categories.set(category_ids)
+    
+    return product

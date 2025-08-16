@@ -77,6 +77,8 @@ PROJECT_APPS = [
     'apps.employee_benefits',
     'apps.performance_reviews',
     'apps.employee_incidents',
+    'apps.prices',
+    'apps.quotes',
 ]
 
 THIRD_PARTY_APPS = [

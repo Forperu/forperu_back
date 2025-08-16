@@ -338,6 +338,21 @@ CREATE TABLE IF NOT EXISTS
     deleted_at TIMESTAMP DEFAULT NULL
   );
 
+-- Prices Table
+CREATE TABLE IF NOT EXISTS
+  `prices` (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    product_id INT DEFAULT NULL,
+    price_cf DECIMAL(14, 2) NULL,
+    price_sf DECIMAL(14, 2) NULL,
+    price_box DECIMAL(14, 2) NULL,
+    created_by INT DEFAULT NULL,
+    updated_by INT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT NULL,
+    deleted_at TIMESTAMP DEFAULT NULL
+  );
+
 -- Product Categories Table
 CREATE TABLE IF NOT EXISTS
   `product_categories` (
