@@ -6,14 +6,5 @@ class CategorySerializer(serializers.ModelSerializer):
   
   class Meta:
     model = Category
-    fields = [
-      'id',
-      'name',
-      'description',
-      'status',
-      'created_by',
-      'updated_by',
-      'created_at',
-      'updated_at',
-      'deleted_at'
-    ]
+    fields = '__all__'
+    read_only_fields = ('updated_at', 'created_at', 'deleted_at')

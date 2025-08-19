@@ -151,17 +151,19 @@ class LoginView(APIView):
   permission_classes = [permissions.AllowAny]
 
   def post(self, request):
-    email = request.data.get('email')
+    print("Datos recibidos:", request.data)
+    
+    username = request.data.get('username')
     password = request.data.get('password')
 
-    if not email or not password:
+    if not username or not password:
       return Response(
-        {"error": "Email and password are required."},
+        {"error": "username and password are required."},
         status=status.HTTP_400_BAD_REQUEST
       )
 
     try:
-      user = User.objects.get(email=email)
+      user = User.objects.get(username=username)
       if not user.check_password(password):
         return Response(
           {"error": "Invalid credentials."},
