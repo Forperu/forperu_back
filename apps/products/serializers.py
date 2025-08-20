@@ -2,7 +2,9 @@ from rest_framework import serializers
 from apps.brands.serializers import BrandSerializer
 from apps.categories.serializers import CategorySerializer
 from apps.products.models import Product, ProductCategory
+from apps.stock_control.models import StockControl
 from apps.units_of_measurement.serializers import UnitOfMeasurementSerializer
+from django.db.models import Sum
 
 class ProductCategorySerializer(serializers.ModelSerializer):
   category = serializers.SerializerMethodField()
@@ -21,6 +23,14 @@ class ProductCategorySerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
   brand = serializers.SerializerMethodField()
   unit_of_measurement = serializers.SerializerMethodField()
+  categories = serializers.SerializerMethodField()
+  category_ids = serializers.ListField(
+    child=serializers.IntegerField(),
+    write_only=True,
+    required=False
+  )
+  stock = serializers.SerializerMethodField()
+  booking = serializers.SerializerMethodField()
 
   class Meta:
     model = Product
@@ -29,6 +39,8 @@ class ProductSerializer(serializers.ModelSerializer):
       'name',
       'brand_id',
       'brand',
+      'categories',
+      'category_ids',
       'unit_of_measurement_id',
       'unit_of_measurement',
       'handle',
@@ -46,6 +58,8 @@ class ProductSerializer(serializers.ModelSerializer):
       'cost',
       'tax_rate',
       'quantity',
+      'stock',
+      'booking',
       'sku',
       'width',
       'height',
@@ -96,3 +110,17 @@ class ProductSerializer(serializers.ModelSerializer):
       product.categories.set(category_ids)
     
     return product
+  
+  def get_stock(self, obj):
+    stock = StockControl.objects.filter(
+      product=obj,
+      deleted_at__isnull=True
+    ).aggregate(total_stock=Sum('current_stock'))['total_stock'] or 0
+    return stock
+  
+  def get_booking(self, obj):
+    booking = StockControl.objects.filter(
+      product=obj,
+      deleted_at__isnull=True
+    ).aggregate(total_booking=Sum('current_booking'))['total_booking'] or 0
+    return booking

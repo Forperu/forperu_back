@@ -12,10 +12,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser, FormParser, MultiPartParser
 from django.utils import timezone
-
+from django.db.models import Sum, Value
 from apps.prices.models import Price
-from apps.products.models import Product
-from apps.products.serializers import ProductSerializer
+from apps.products.models import Coalesce, Product, ProductCategory
+from apps.products.serializers import ProductCategorySerializer, ProductSerializer
 from utils.parse_excel import parse_excel
 from utils.parse_csv import parse_csv
 
@@ -24,7 +24,12 @@ class ProductsView(APIView):
   parser_classes = [JSONParser, FormParser, MultiPartParser]
 
   def get(self, request, format=None):
-    products = Product.objects.filter(deleted_at__isnull=True)
+    products = Product.objects.filter(deleted_at__isnull=True) \
+      .prefetch_related('categories') \
+      .annotate(
+        total_stock=Coalesce(Sum('stock_controls__current_stock'), Value(0)),
+        total_booking=Coalesce(Sum('stock_controls__current_booking'), Value(0))
+      )
     serializer = ProductSerializer(products, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
   
@@ -33,7 +38,7 @@ class ProductDetailView(APIView):
   parser_classes = [JSONParser, FormParser, MultiPartParser]
 
   def get(self, request, pk, format=None):
-    product = get_object_or_404(Product, pk=pk, deleted_at__isnull=True)
+    product = get_object_or_404(Product.objects.prefetch_related('categories'), pk=pk, deleted_at__isnull=True)
     serializer = ProductSerializer(product)
     return Response(serializer.data, status=status.HTTP_200_OK)
   
@@ -75,10 +80,9 @@ class UpdateProductView(APIView):
     if serializer.is_valid():
       updated_product = serializer.save(updated_by=request.user)
 
-      # Comparar si el cost fue modificado
+      # Check if cost was modified
       new_cost = updated_product.cost
       if "cost" in request.data and str(old_cost) != str(new_cost):
-        # Crear nuevo registro en prices
         Price.objects.create(
           product=updated_product,
           cost=new_cost,
@@ -154,6 +158,63 @@ class DeleteProductsByIdsView(APIView):
         status=status.HTTP_500_INTERNAL_SERVER_ERROR
       )
 
+class ProductCategoriesView(APIView):
+  permission_classes = [IsAuthenticated]
+  parser_classes = [JSONParser, FormParser, MultiPartParser]
+
+  def get(self, request, product_id, format=None):
+    product = get_object_or_404(Product, pk=product_id, deleted_at__isnull=True)
+    categories = product.product_categories.all()
+    serializer = ProductCategorySerializer(categories, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+  def post(self, request, product_id, format=None):
+    product = get_object_or_404(Product, pk=product_id, deleted_at__isnull=True)
+    category_id = request.data.get('category_id')
+    
+    if not category_id:
+      return Response(
+        {'error': 'category_id is required'},
+        status=status.HTTP_400_BAD_REQUEST
+      )
+
+    # Check if relationship already exists
+    if product.categories.filter(id=category_id).exists():
+      return Response(
+        {'error': 'This category is already assigned to the product'},
+        status=status.HTTP_400_BAD_REQUEST
+      )
+
+    product_category = ProductCategory.objects.create(
+      product=product,
+      category_id=category_id
+    )
+    
+    serializer = ProductCategorySerializer(product_category)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+  def delete(self, request, product_id, format=None):
+    product = get_object_or_404(Product, pk=product_id, deleted_at__isnull=True)
+    category_id = request.data.get('category_id')
+    
+    if not category_id:
+      return Response(
+        {'error': 'category_id is required'},
+        status=status.HTTP_400_BAD_REQUEST
+      )
+
+    product_category = get_object_or_404(
+      ProductCategory,
+      product=product,
+      category_id=category_id
+    )
+    
+    product_category.delete()
+    return Response(
+      {'message': 'Category removed from product successfully'},
+      status=status.HTTP_204_NO_CONTENT
+    )
+    
 class ExportProductsView(APIView):
   permission_classes = [IsAuthenticated]
 

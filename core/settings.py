@@ -77,8 +77,11 @@ PROJECT_APPS = [
     'apps.employee_benefits',
     'apps.performance_reviews',
     'apps.employee_incidents',
+    'apps.stock_control',
     'apps.prices',
     'apps.quotes',
+    'apps.keys',
+    'apps.systems',
 ]
 
 THIRD_PARTY_APPS = [
