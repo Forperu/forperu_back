@@ -78,7 +78,10 @@ class UpdateProductView(APIView):
     serializer = ProductSerializer(product, data=request.data, partial=True)
 
     if serializer.is_valid():
-      updated_product = serializer.save(updated_by=request.user)
+      updated_product = serializer.save(
+        updated_by=request.user,
+        updated_at=timezone.now()
+      )
 
       # Check if cost was modified
       new_cost = updated_product.cost
@@ -245,7 +248,7 @@ class ExportProductsView(APIView):
     sheet.title = "Productos"
 
     # Agregar encabezados
-    headers = ["Codigo", "Nombre", "Precio(CF)", "Precio(SF)", "Precio(Caja)", "Costo"]
+    headers = ["Codigo", "Nombre", "Precio(CF)", "Precio(SF)", "Precio(Caja)", "Ctd. en caja", "Unidad de medida"]
     sheet.append(headers)
 
     # Estilo para los encabezados
@@ -263,6 +266,8 @@ class ExportProductsView(APIView):
       pcf = product.featured_pcf if product.featured_pcf is not None else 0.0
       psf = product.featured_psf if product.featured_psf is not None else 0.0
       pbox = product.featured_pbox if product.featured_pbox is not None else 0.0
+      qtBox = product.quantity_in_box if product.quantity_in_box is not None else 0
+      unit = product.unit_of_measurement.name if product.unit_of_measurement else ""
 
       row = [
         sku,
@@ -270,7 +275,9 @@ class ExportProductsView(APIView):
         f"{pcf:.2f}",
         f"{psf:.2f}",
         f"{pbox:.2f}",
-        f"{product.cost:.2f}",
+        f"{qtBox:.2f}",
+        # f"{product.cost:.2f}",
+        unit
       ]
 
       sheet.append(row)

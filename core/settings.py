@@ -77,11 +77,6 @@ PROJECT_APPS = [
     'apps.employee_benefits',
     'apps.performance_reviews',
     'apps.employee_incidents',
-    'apps.stock_control',
-    'apps.prices',
-    'apps.quotes',
-    'apps.keys',
-    'apps.systems',
 ]
 
 THIRD_PARTY_APPS = [
@@ -258,6 +253,7 @@ AUTHENTICATION_BACKENDS = (
 AUTH_USER_MODEL = 'users.UserAccount'
 
 SIMPLE_JWT = {
+    "USER_ID_FIELD": 'username',
     "AUTH_HEADER_TYPES": ("Bearer",),
     "ACCESS_TOKEN_LIFETIME": timedelta(days=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=60),

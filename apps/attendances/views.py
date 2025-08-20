@@ -8,6 +8,7 @@ from .models import Attendance
 from .serializers import AttendanceSerializer
 from rest_framework.parsers import JSONParser, FormParser, MultiPartParser
 from django.utils import timezone
+from datetime import timedelta
 
 class AttendanceAPIView(APIView):
   permission_classes = [IsAuthenticated]
@@ -18,10 +19,30 @@ class AttendanceAPIView(APIView):
       obj = get_object_or_404(Attendance, pk=pk, deleted_at__isnull=True)
       serializer = AttendanceSerializer(obj)
       return Response(serializer.data, status=status.HTTP_200_OK)
-      
-    objs = Attendance.objects.filter(deleted_at__isnull=True)
+        
+    # Obtener la fecha actual
+    now = timezone.now()
+    
+    # Calcular el inicio de la semana actual (lunes)
+    start_of_week = now - timedelta(days=now.weekday())
+    start_of_week = start_of_week.replace(hour=0, minute=0, second=0, microsecond=0)
+    
+    # Calcular el final de la semana actual (domingo)
+    end_of_week = start_of_week + timedelta(days=6)
+    end_of_week = end_of_week.replace(hour=23, minute=59, second=59, microsecond=999999)
+    
+    # Filtrar asistencias creadas durante esta semana
+    objs = Attendance.objects.filter(
+      deleted_at__isnull=True,
+      created_at__range=(start_of_week, end_of_week)
+    ).order_by('-created_at')
+    
     serializer = AttendanceSerializer(objs, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    # Agregar información de la semana en la respuesta
+    response_data = serializer.data
+    
+    return Response(response_data, status=status.HTTP_200_OK)
 
   def post(self, request, format=None):
     serializer = AttendanceSerializer(data=request.data)

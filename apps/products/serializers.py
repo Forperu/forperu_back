@@ -22,7 +22,9 @@ class ProductCategorySerializer(serializers.ModelSerializer):
     
 class ProductSerializer(serializers.ModelSerializer):
   brand = serializers.SerializerMethodField()
+  brand_id = serializers.IntegerField(required=False, allow_null=True)
   unit_of_measurement = serializers.SerializerMethodField()
+  unit_of_measurement_id = serializers.IntegerField(required=False, allow_null=True)
   categories = serializers.SerializerMethodField()
   category_ids = serializers.ListField(
     child=serializers.IntegerField(),
