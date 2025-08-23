@@ -13,9 +13,12 @@ from rest_framework.response import Response
 from rest_framework.parsers import JSONParser, FormParser, MultiPartParser
 from django.utils import timezone
 from django.db.models import Sum, Value
+from django.db.models.functions import Coalesce
 from apps.prices.models import Price
-from apps.products.models import Coalesce, Product, ProductCategory
+from apps.products.models import Product, ProductCategory
 from apps.products.serializers import ProductCategorySerializer, ProductSerializer
+from apps.units_of_measurement.models import UnitOfMeasurement
+from django.db import models
 from utils.parse_excel import parse_excel
 from utils.parse_csv import parse_csv
 
@@ -124,7 +127,7 @@ class DeleteProductsByIdsView(APIView):
           status=status.HTTP_400_BAD_REQUEST
         )
 
-      # Convertir a enteros por si acaso
+      # Convertir a enteros
       try:
         product_ids = [int(id) for id in product_ids]
       except (ValueError, TypeError):
@@ -133,26 +136,32 @@ class DeleteProductsByIdsView(APIView):
           status=status.HTTP_400_BAD_REQUEST
         )
 
+      # Productos existentes (no eliminados lógicamente)
       existing_products = Product.objects.filter(
         id__in=product_ids,
         deleted_at__isnull=True
       )
 
-      if existing_products.count() != len(product_ids):
-        return Response(
-          {'error': 'Algunos IDs no existen o ya fueron eliminados'},
-          status=status.HTTP_400_BAD_REQUEST
+      # Validación: si TODOS los IDs existen
+      if existing_products.count() == len(product_ids):
+        # Eliminar físicamente
+        deleted_count, _ = existing_products.delete()
+        return Response({
+          'message': f'{deleted_count} productos eliminados físicamente',
+          'deleted_count': deleted_count,
+          'mode': 'hard_delete'
+        }, status=status.HTTP_200_OK)
+      else:
+        # Eliminar lógicamente
+        updated = existing_products.update(
+          deleted_at=timezone.now(),
+          updated_by=request.user
         )
-
-      updated = existing_products.update(
-        deleted_at=timezone.now(),
-        updated_by=request.user
-      )
-
-      return Response({
-        'message': f'{updated} productos eliminados exitosamente',
-        'deleted_count': updated
-      }, status=status.HTTP_200_OK)
+        return Response({
+          'message': f'{updated} productos marcados como eliminados',
+          'deleted_count': updated,
+          'mode': 'soft_delete'
+        }, status=status.HTTP_200_OK)
 
     except Exception as e:
       traceback.print_exc()
@@ -234,7 +243,7 @@ class ExportProductsView(APIView):
       if product_ids:
         products = Product.objects.filter(id__in=product_ids)
       else:
-        products = Product.objects.all()
+        products = Product.objects.filter(deleted_at__isnull=True)
     except Exception as e:
       return JsonResponse(
         {'error': 'Failed to fetch products'}, 
@@ -328,27 +337,83 @@ class ImportProductsView(APIView):
           status=400
         )
       
-      # Guardar productos en la base de datos
-      products_to_create = [
-        Product(
-          sku=product.get('sku'),
-          name=product['name'],
-          prices_cf=product.get('prices_cf', {}),
-          prices_sf=product.get('prices_sf', {}),
-          prices_box=product.get('prices_box', {}),
-          featured_pcf=product.get('featured_pcf'),
-          featured_psf=product.get('featured_psf'),
-          featured_pbox=product.get('featured_pbox'),
-          cost=product['cost'],
-          created_by_id=user_id
-        ) for product in products_data
-      ]
+      # Cargar unidades de medida
+      units = UnitOfMeasurement.objects.all()
+      shortcut_map = {u.shortcut.strip().upper(): u.id for u in units if u.shortcut}
+      name_map = {u.name.strip().upper(): u.id for u in units if u.name}
+        
+      # Obtener todos los SKUs y nombres ya registrados en BD
+      existing_products = Product.objects.values_list("sku", "name")
+      existing_skus = {sku for sku, _ in existing_products if sku}
+      existing_names = {name.lower() for _, name in existing_products if name}
       
-      Product.objects.bulk_create(products_to_create)
-      
-      response = JsonResponse({'message': 'Import successful'})
+      # Filtrar productos duplicados
+      new_products = []
+      skipped_products = []
+      restored_products = []
 
-      return response
+      for product in products_data:
+        sku = product.get("sku")
+        name = product.get("name")
+        unit_value = product.get("unit")
+
+        # Buscar producto existente por sku o name
+        existing = Product.objects.filter(
+          models.Q(sku=sku) | models.Q(name__iexact=name)
+        ).first()
+
+        # Si ya existe y está eliminado → restaurarlo
+        if existing and existing.deleted_at is not None:
+          unit_id = None
+          if unit_value:
+            unit_value = str(unit_value).strip().upper()
+            unit_id = shortcut_map.get(unit_value)
+
+          existing.deleted_at = None
+          existing.updated_at = timezone.now()
+          existing.updated_by_id = user_id
+          existing.cost = product['cost']
+          existing.unit_of_measurement_id = unit_id
+          existing.save()
+          restored_products.append(name)
+          continue
+        
+        # Si ya existe y no está eliminado → saltarlo
+        if existing and existing.deleted_at is None:
+          skipped_products.append(name)
+          continue
+
+        # Detectar unidad de medida
+        unit_id = None
+        if unit_value:
+          unit_value = str(unit_value).strip().upper()
+          unit_id = shortcut_map.get(unit_value)
+        
+        new_products.append(
+          Product(
+            sku=sku,
+            name=name,
+            unit_of_measurement_id=unit_id,
+            prices_cf=product.get('prices_cf', {}),
+            prices_sf=product.get('prices_sf', {}),
+            prices_box=product.get('prices_box', {}),
+            featured_pcf=product.get('featured_pcf'),
+            featured_psf=product.get('featured_psf'),
+            featured_pbox=product.get('featured_pbox'),
+            cost=product['cost'],
+            created_by_id=user_id
+          )
+        )
+
+      # Crear solo los que son nuevos
+      if new_products:
+        Product.objects.bulk_create(new_products)
+      
+      return JsonResponse({
+        'message': f'Importación finalizada. {len(new_products)} nuevo(s), {len(restored_products)} restaurado(s), {len(skipped_products)} omitido(s).',
+        'restored': restored_products,
+        'skipped': skipped_products  # Para que sepas cuáles se omitieron
+      })
 
     except Exception as e:
       return JsonResponse({'error': str(e)}, status=400)

@@ -34,8 +34,8 @@ class AttendanceAPIView(APIView):
     # Filtrar asistencias creadas durante esta semana
     objs = Attendance.objects.filter(
       deleted_at__isnull=True,
-      created_at__range=(start_of_week, end_of_week)
-    ).order_by('-created_at')
+      date__range=(start_of_week, end_of_week)
+    ).order_by('-date')
     
     serializer = AttendanceSerializer(objs, many=True)
     

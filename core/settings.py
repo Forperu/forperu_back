@@ -77,6 +77,12 @@ PROJECT_APPS = [
     'apps.employee_benefits',
     'apps.performance_reviews',
     'apps.employee_incidents',
+    'apps.stock_control',
+    'apps.inventory_movements',
+    'apps.prices',
+    'apps.quotes',
+    'apps.keys',
+    'apps.systems',
 ]
 
 THIRD_PARTY_APPS = [
@@ -200,7 +206,7 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = 'static/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = 'media/'
 
 # STATICFILES_DIRS = [

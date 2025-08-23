@@ -24,6 +24,7 @@ class EmployeeIncidentSerializer(serializers.ModelSerializer):
       'updated_at',
       'deleted_at'
     ]
+    read_only_fields = ('updated_at', 'created_at', 'deleted_at')
   
   def get_employee(self, obj):
     if obj.employee:

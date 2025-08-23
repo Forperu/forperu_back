@@ -14,7 +14,7 @@ def parse_excel(file, user_id):
     header_map = {header: idx for idx, header in enumerate(headers) if header}
     
     # Validar encabezados requeridos
-    required_headers = ["Codigo", "Nombre", "Precio(CF)", "Precio(SF)", "Precio(Caja)", "Costo"]
+    required_headers = ["Codigo", "Nombre", "Precio(CF)", "Precio(SF)", "Precio(Caja)", "Costo", "Unidad"]
     for req in required_headers:
       if req not in header_map:
         raise ValueError(f"Falta el encabezado requerido: {req}")
@@ -79,6 +79,7 @@ def parse_excel(file, user_id):
         "featured_pcf": price_cf if row[header_map["Precio(CF)"]] else None,
         "featured_psf": price_sf if row[header_map["Precio(SF)"]] else None,
         "featured_pbox": price_box if row[header_map["Precio(Caja)"]] else None,
+        "unit": row[header_map["Unidad"]],
         "cost": cost,
         "created_by": user_id
       }
